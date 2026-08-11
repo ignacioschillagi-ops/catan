@@ -10,7 +10,7 @@ const CIVILIZATIONS = [
     name: "Incas",
     number: 1,
     color: "var(--incas)",
-    image: "images/civs/incas.jpg",
+    image: "incas.jpg",
     costs: {
       camino: ["🐑", "🧱"],
       poblado: ["🐑", "🧱", "🪵", "🌾"],
