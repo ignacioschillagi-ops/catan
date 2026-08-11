@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World of Catan — Reglas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="crest">
+      <div class="crest-mark">✦</div>
+      <h1 class="crest-title">World<span>of</span>Catan</h1>
+      <p class="crest-sub">Reglas de la casa</p>
+    </div>
+
+    <button class="nav-item nav-item--home is-active" data-target="inicio">
+      <span class="nav-seal nav-seal--home">◈</span><span class="nav-label">Inicio</span>
+    </button>
+
+    <nav class="nav" id="nav">
+      <button class="nav-item" data-target="dos-doce">
+        <span class="nav-seal">2·12</span><span class="nav-label">2 y 12</span>
+      </button>
+      <button class="nav-item" data-target="soborno">
+        <span class="nav-seal">☙</span><span class="nav-label">Soborno al ladrón</span>
+      </button>
+      <button class="nav-item" data-target="consecuencias">
+        <span class="nav-seal">🂡</span><span class="nav-label">Consecuencias del 7</span>
+      </button>
+      <button class="nav-item" data-target="civilizaciones">
+        <span class="nav-seal">⚜</span><span class="nav-label">Civilizaciones</span>
+      </button>
+      <button class="nav-item" data-target="asedio">
+        <span class="nav-seal">⚔</span><span class="nav-label">Asedio y defensa</span>
+      </button>
+    </nav>
+
+    <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
+      ⬇ Bajar PDF para imprimir
+    </a>
+
+    <div class="sidebar-foot">
+      <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
+      <a class="foot-link" href="https://yosoyjoe.vercel.app/" target="_blank" rel="noopener">@yosoyjoe</a>
+    </div>
+  </aside>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+
+    <!-- INICIO -->
+    <section class="page is-active" id="inicio">
+      <header class="page-hero">
+        <p class="page-eyebrow">Compendio de variantes</p>
+        <h2 class="page-title">Reglas de World of Catan</h2>
+        <p class="page-lede">Reglas pensadas para darle más dinámica al juego. Pueden jugarse por separado, usando las que crean convenientes para el desarrollo de la partida.</p>
+      </header>
+
+      <div class="index-grid">
+        <button class="index-card" data-target="dos-doce">
+          <span class="index-seal">2·12</span>
+          <h3>2 y 12</h3>
+          <p>Ambos extremos del dado producen recursos por igual.</p>
+        </button>
+        <button class="index-card" data-target="soborno">
+          <span class="index-seal">☙</span>
+          <h3>Soborno al ladrón</h3>
+          <p>Pagá para reubicar al ladrón antes de que te bloquee.</p>
+        </button>
+        <button class="index-card" data-target="consecuencias">
+          <span class="index-seal">🂡</span>
+          <h3>Consecuencias del 7</h3>
+          <p>Un mazo de 30 cartas de reino decide qué pasa al sacar 7.</p>
+        </button>
+        <button class="index-card" data-target="civilizaciones">
+          <span class="index-seal">⚜</span>
+          <h3>Civilizaciones</h3>
+          <p>Seis pueblos, cada uno con una habilidad pasiva y una activa.</p>
+        </button>
+        <button class="index-card" data-target="asedio">
+          <span class="index-seal">⚔</span>
+          <h3>Asedio y defensa</h3>
+          <p>Atacá y defendé fichas rivales adyacentes a las tuyas.</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2 Y 12 -->
+    <section class="page" id="dos-doce">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Regla simple</p>
+        <h2 class="page-title">2 y 12</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Si el resultado de los dados es <strong>2</strong> o <strong>12</strong>, ambos números producen recursos. Estos números son equivalentes en valor para efectos del juego.</p>
+        <div class="dice-demo">
+          <div class="die">2</div>
+          <span class="dice-eq">=</span>
+          <div class="die">12</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBORNO AL LADRÓN -->
+    <section class="page" id="soborno">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Extorsionando al ladrón</p>
+        <h2 class="page-title">Soborno al ladrón</h2>
+      </header>
+      <div class="panel">
+        <h3 class="panel-h">Mover al ladrón</h3>
+        <p>Si el ladrón está bloqueando uno de tus números, durante la etapa de construcción podés pagar <strong>2 recursos equivalentes</strong> al hexágono obstruido, para moverlo a un hexágono adyacente al que ocupa.</p>
+        <div class="callout">
+          <span class="callout-tag">Importante</span>
+          <p>Al moverlo de esta manera, no podés robar recursos de los jugadores que ocupen el nuevo hexágono, como lo harías con un 7.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSECUENCIAS DEL 7 -->
+    <section class="page" id="consecuencias">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">El reino decide</p>
+        <h2 class="page-title">Consecuencias del 7</h2>
+        <p class="page-lede">Al sacar un 7, además de mover el ladrón con normalidad, se puede robar una carta del mazo del reino para ver qué sucede este turno. El ladrón se mueve igual, salvo que la carta indique lo contrario.</p>
+      </header>
+
+      <div class="deck-panel">
+        <div class="deck-panel-top">
+          <span class="deck-count" id="deckCounter">Carta 0 de 30</span>
+          <button class="btn-reset" id="deckReset" title="Reiniciar mazo">↺ reiniciar mazo</button>
+        </div>
+        <div class="fate-card" id="fateCard">
+          <div class="fate-card-inner">
+            <p class="fate-card-eyebrow">Carta del reino</p>
+            <p class="fate-quote" id="fateQuote">Tocá el sello para tirar el 7.</p>
+            <div class="fate-effect" id="fateEffect" style="display:none;">
+              <span class="fate-tag" id="fateTag"></span>
+              <p class="fate-effect-text" id="fateEffectText"></p>
+            </div>
+          </div>
+        </div>
+        <button class="btn-seal" id="drawBtn">Tirar el 7</button>
+        <p class="deck-note" id="reshuffleNote">El mazo se agotó — se barajó de nuevo.</p>
+      </div>
+    </section>
+
+    <!-- CIVILIZACIONES -->
+    <section class="page" id="civilizaciones">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Seis pueblos, seis caminos</p>
+        <h2 class="page-title">Civilizaciones</h2>
+        <p class="page-lede">Existen 6 civilizaciones distintas, con 3 tipos distintos de construcción. Cada una posee dos habilidades: una pasiva y otra activa.</p>
+      </header>
+
+      <div class="panel panel--split">
+        <div>
+          <span class="callout-tag">Habilidad pasiva</span>
+          <p>Efecto que está siempre activo durante toda la partida, sin necesidad de declararlo ni gastar nada para usarlo. Se aplica automáticamente cuando se cumple su condición.</p>
+        </div>
+        <div>
+          <span class="callout-tag callout-tag--alt">Habilidad activa (con 7)</span>
+          <p>Efecto que se dispara únicamente cuando el jugador de esa civilización obtiene un 7. No es automática: el jugador decide si la usa y en qué orden respecto a robar la carta.</p>
+        </div>
+      </div>
+      <p class="panel-note">Cada jugador lanza un dado para saber qué civilización utilizará. Si el número ya salió, se vuelve a lanzar.</p>
+      <p class="panel-note panel-note--icons">🪵 madera &nbsp;·&nbsp; 🐑 oveja &nbsp;·&nbsp; 🪨 mineral &nbsp;·&nbsp; 🌾 trigo &nbsp;·&nbsp; 🧱 arcilla</p>
+
+      <div class="civ-grid" id="civGrid"><!-- civ cards injected by JS --></div>
+    </section>
+
+    <!-- ASEDIO Y DEFENSA -->
+    <section class="page" id="asedio">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Asedio a otro jugador</p>
+        <h2 class="page-title">Asedio y defensa</h2>
+      </header>
+
+      <div class="panel">
+        <h3 class="panel-h">Asediando al enemigo</h3>
+        <ul class="rule-list">
+          <li>Si tenés un camino, poblado o ciudad adyacente a una ficha de otro jugador, podés declarar un asedio sobre ella como <strong>última acción de tu turno</strong>.</li>
+          <li>Costo: <strong>1 carta de Caballero</strong> + los mismos recursos que se usaron para construir esa ficha. El Caballero sigue la regla estándar de cartas de desarrollo: si lo comprás este turno, recién podés jugarlo en tu próximo turno.</li>
+          <li>No hay límite de cantidad de asedios por turno, siempre que tengas fichas rivales adyacentes y los recursos para pagarlos.</li>
+          <li>Un jugador con <strong>7 o más puntos de victoria a la vista</strong> no puede declarar ningún asedio (aunque sí puede ser objetivo de uno).</li>
+          <li>Solo puede haber <strong>un asedio activo por ficha</strong> a la vez.</li>
+          <li>La ficha asediada se marca con una ficha de asedio y no produce recursos mientras dure, sin importar si sale su número en el dado.</li>
+        </ul>
+      </div>
+
+      <div class="knight-example">
+        <div class="knight-image">
+          <div class="knight-placeholder" id="knightPlaceholder">
+            <span class="icon">⚔</span>
+            <span class="label">Carta de Caballero</span>
+          </div>
+          <img id="knightPreview" src="images/knight.jpg" alt="Ejemplo de carta de Caballero">
+        </div>
+        <p class="knight-caption">Ejemplo de carta de Caballero — imagen sincronizada desde <code>/images/knight.jpg</code></p>
+      </div>
+
+      <div class="cost-table-wrap">
+        <table class="cost-table">
+          <thead>
+            <tr><th>Ficha</th><th>Costo atacar</th><th>Costo defender</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Camino</td><td>1 Caballero + 2 recursos</td><td>1 Caballero</td></tr>
+            <tr><td>Poblado</td><td>1 Caballero + 4 recursos</td><td>1 Caballero + 1 Arcilla</td></tr>
+            <tr><td>Ciudad</td><td>1 Caballero + 5 recursos</td><td>1 Caballero + 2 Piedras</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-h">Defensa del asedio</h3>
+        <p>Solo el jugador atacado puede resistir, como <strong>última acción de su turno</strong>, pagando el costo de defensa correspondiente. Si paga, retira la ficha de asedio y la pieza sigue en pie con normalidad.</p>
+
+        <h3 class="panel-h">Resolución</h3>
+        <p>Si el asedio no fue defendido, se resuelve al comienzo de la vuelta siguiente del atacante (una vuelta completa de la mesa), <strong>justo antes de tirar los dados</strong>. Un poblado o camino destruido vuelve a la mano del jugador; una ciudad se degrada a poblado y se devuelve.</p>
+
+        <div class="callout">
+          <span class="callout-tag">Importante</span>
+          <p>La ficha sigue valiendo puntos mientras siga en el tablero. La carta de Caballero utilizada no afecta al ladrón.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
