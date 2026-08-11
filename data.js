@@ -10,7 +10,7 @@ const CIVILIZATIONS = [
     name: "Incas",
     number: 1,
     color: "var(--incas)",
-    image: "incas.jpg",
+    image: "images/incas.jpg",
     costs: {
       camino: ["🐑", "🧱"],
       poblado: ["🐑", "🧱", "🪵", "🌾"],
@@ -25,7 +25,7 @@ const CIVILIZATIONS = [
     name: "Azteca",
     number: 2,
     color: "var(--azteca)",
-    image: "images/civs/azteca.jpg",
+    image: "images/azteca.jpg",
     costs: {
       camino: ["🐑", "🧱"],
       poblado: ["🐑", "🧱", "🪵", "🌾"],
@@ -40,7 +40,7 @@ const CIVILIZATIONS = [
     name: "Romanos",
     number: 3,
     color: "var(--romanos)",
-    image: "images/civs/romanos.jpg",
+    image: "images/romanos.jpg",
     costs: {
       camino: ["🪵", "🪨"],
       poblado: ["🪵", "🪨", "🌾", "🐑"],
@@ -55,7 +55,7 @@ const CIVILIZATIONS = [
     name: "Vikingos",
     number: 4,
     color: "var(--vikingos)",
-    image: "images/civs/vikingos.jpg",
+    image: "images/vikingos.jpg",
     costs: {
       camino: ["🪵", "🪨"],
       poblado: ["🪵", "🪨", "🌾", "🐑"],
@@ -70,7 +70,7 @@ const CIVILIZATIONS = [
     name: "Egipcios",
     number: 5,
     color: "var(--egipcios)",
-    image: "images/civs/egipcios.jpg",
+    image: "images/egipcios.jpg",
     costs: {
       camino: ["🌾", "🧱"],
       poblado: ["🌾", "🧱", "🐑", "🪵"],
@@ -85,7 +85,7 @@ const CIVILIZATIONS = [
     name: "Chinos",
     number: 6,
     color: "var(--chinos)",
-    image: "images/civs/chinos.jpg",
+    image: "images/chinos.jpg",
     costs: {
       camino: ["🌾", "🧱"],
       poblado: ["🌾", "🧱", "🐑", "🪵"],
