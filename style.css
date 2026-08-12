@@ -802,17 +802,44 @@ html, body {
    ============================================================ */
 .disaster-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 .disaster-card {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
   background: rgba(255,255,255,0.32);
   border: 1px solid rgba(92,58,26,0.18);
   border-left: 3px solid var(--wax);
   border-radius: 8px;
-  padding: 1.1rem 1.2rem;
+  padding: 1rem 1.1rem;
 }
+
+.disaster-image {
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  aspect-ratio: 11 / 17;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 2px solid var(--leather);
+  background: linear-gradient(160deg, var(--leather), var(--leather-deep));
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.disaster-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.disaster-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(232, 220, 193, 0.6);
+}
+.disaster-placeholder .icon { font-size: 1.3rem; }
+
+.disaster-body { flex: 1; min-width: 0; }
 .disaster-card h3 {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -835,6 +862,11 @@ html, body {
   line-height: 1.5;
   margin: 0;
   color: var(--ink-soft);
+}
+
+@media (max-width: 500px) {
+  .disaster-card { flex-direction: column; }
+  .disaster-image { width: 56px; }
 }
 
 /* ============================================================

@@ -115,6 +115,22 @@ CIVILIZATIONS.forEach(civ => {
 })();
 
 // ============================================================
+// CATASTROFES - imagenes de cada carta (con fallback a placeholder)
+// ============================================================
+document.querySelectorAll(".disaster-image").forEach(box => {
+  const img = box.querySelector("img");
+  const placeholder = box.querySelector(".disaster-placeholder");
+  if (!img) return;
+  img.addEventListener("error", () => {
+    img.style.display = "none";
+    placeholder.style.display = "flex";
+  });
+  img.addEventListener("load", () => {
+    placeholder.style.display = "none";
+  });
+});
+
+// ============================================================
 // CONSECUENCIAS DEL 7 - mazo con contador y sin repeticion
 // ============================================================
 const tagLabels = {
