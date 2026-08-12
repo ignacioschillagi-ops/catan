@@ -1,7 +1,7 @@
 // ============================================================
 // CIVILIZACIONES
 // Los costos usan iconos de recursos: madera, oveja, mineral, trigo, arcilla
-// "image" apunta a la carpeta /images/civs/ - reemplaza esos archivos en GitHub
+// "image" apunta a la carpeta /images/ - reemplaza esos archivos en GitHub
 // (mismo nombre, cualquier imagen) y se sincronizan solas en Vercel.
 // ============================================================
 const CIVILIZATIONS = [

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World of Catan — Reglas</title>
+<link rel="icon" href="images/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -15,7 +16,7 @@
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar" id="sidebar">
     <div class="crest">
-      <div class="crest-mark">✦</div>
+      <img class="crest-mark" src="images/logo.svg" alt="World of Catan">
       <h1 class="crest-title">World<span>of</span>Catan</h1>
       <p class="crest-sub">Reglas de la casa</p>
     </div>
@@ -134,6 +135,11 @@
         <p class="page-lede">Al sacar un 7, además de mover el ladrón con normalidad, se puede robar una carta del mazo del reino para ver qué sucede este turno. El ladrón se mueve igual, salvo que la carta indique lo contrario.</p>
       </header>
 
+      <div class="callout callout--warning">
+        <span class="callout-tag callout-tag--warn">Incompatible</span>
+        <p>Esta regla no es compatible con <strong>Civilizaciones</strong>. Se juega una de las dos, no ambas en la misma partida.</p>
+      </div>
+
       <div class="deck-panel">
         <div class="deck-panel-top">
           <span class="deck-count" id="deckCounter">Carta 0 de 30</span>
@@ -162,6 +168,11 @@
         <p class="page-lede">Existen 6 civilizaciones distintas, con 3 tipos distintos de construcción. Cada una posee dos habilidades: una pasiva y otra activa.</p>
       </header>
 
+      <div class="callout callout--warning">
+        <span class="callout-tag callout-tag--warn">Incompatible</span>
+        <p>Esta regla no es compatible con <strong>Consecuencias del 7</strong>. Se juega una de las dos, no ambas en la misma partida.</p>
+      </div>
+
       <div class="panel panel--split">
         <div>
           <span class="callout-tag">Habilidad pasiva</span>
@@ -185,19 +196,7 @@
         <h2 class="page-title">Asedio y defensa</h2>
       </header>
 
-      <div class="panel">
-        <h3 class="panel-h">Asediando al enemigo</h3>
-        <ul class="rule-list">
-          <li>Si tenés un camino, poblado o ciudad adyacente a una ficha de otro jugador, podés declarar un asedio sobre ella como <strong>última acción de tu turno</strong>.</li>
-          <li>Costo: <strong>1 carta de Caballero</strong> + los mismos recursos que se usaron para construir esa ficha. El Caballero sigue la regla estándar de cartas de desarrollo: si lo comprás este turno, recién podés jugarlo en tu próximo turno.</li>
-          <li>No hay límite de cantidad de asedios por turno, siempre que tengas fichas rivales adyacentes y los recursos para pagarlos.</li>
-          <li>Un jugador con <strong>7 o más puntos de victoria a la vista</strong> no puede declarar ningún asedio (aunque sí puede ser objetivo de uno).</li>
-          <li>Solo puede haber <strong>un asedio activo por ficha</strong> a la vez.</li>
-          <li>La ficha asediada se marca con una ficha de asedio y no produce recursos mientras dure, sin importar si sale su número en el dado.</li>
-        </ul>
-      </div>
-
-      <div class="knight-example">
+      <div class="siege-top">
         <div class="knight-image">
           <div class="knight-placeholder" id="knightPlaceholder">
             <span class="icon">⚔</span>
@@ -205,7 +204,18 @@
           </div>
           <img id="knightPreview" src="images/knight.jpg" alt="Ejemplo de carta de Caballero">
         </div>
-        <p class="knight-caption">Ejemplo de carta de Caballero — imagen sincronizada desde <code>/images/knight.jpg</code></p>
+
+        <div class="panel siege-rules">
+          <h3 class="panel-h">Asediando al enemigo</h3>
+          <ul class="rule-list">
+            <li>Si tenés un camino, poblado o ciudad adyacente a una ficha de otro jugador, podés declarar un asedio sobre ella como <strong>última acción de tu turno</strong>.</li>
+            <li>Costo: <strong>1 carta de Caballero</strong> + los mismos recursos que se usaron para construir esa ficha. El Caballero sigue la regla estándar de cartas de desarrollo: si lo comprás este turno, recién podés jugarlo en tu próximo turno.</li>
+            <li>No hay límite de cantidad de asedios por turno, siempre que tengas fichas rivales adyacentes y los recursos para pagarlos.</li>
+            <li>Un jugador con <strong>7 o más puntos de victoria a la vista</strong> no puede declarar ningún asedio (aunque sí puede ser objetivo de uno).</li>
+            <li>Solo puede haber <strong>un asedio activo por ficha</strong> a la vez.</li>
+            <li>La ficha asediada se marca con una ficha de asedio y no produce recursos mientras dure, sin importar si sale su número en el dado.</li>
+          </ul>
+        </div>
       </div>
 
       <div class="cost-table-wrap">
