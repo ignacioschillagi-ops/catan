@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>World of Catan — Reglas</title>
 <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+<link rel="icon" href="images/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="images/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5b3a22">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -17,7 +22,6 @@
   <aside class="sidebar" id="sidebar">
     <div class="crest">
       <img class="crest-mark" src="images/logo.svg" alt="World of Catan">
-      <h1 class="crest-title">World<span>of</span>Catan</h1>
       <p class="crest-sub">Reglas de la casa</p>
     </div>
 
@@ -41,11 +45,33 @@
       <button class="nav-item" data-target="asedio">
         <span class="nav-seal">⚔</span><span class="nav-label">Asedio y defensa</span>
       </button>
+      <button class="nav-item" data-target="catastrofes">
+        <span class="nav-seal">☄</span><span class="nav-label">Catástrofes</span>
+      </button>
     </nav>
 
     <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
       ⬇ Bajar PDF para imprimir
     </a>
+
+    <details class="install-dropdown">
+      <summary>¿Cómo instalo la app?</summary>
+      <div class="install-content">
+        <p class="install-os"><strong>En iPhone (Safari)</strong></p>
+        <ol>
+          <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
+          <li>Elegí "Agregar a pantalla de inicio".</li>
+          <li>Confirmá el nombre y tocá "Agregar".</li>
+        </ol>
+        <p class="install-os"><strong>En Android (Chrome)</strong></p>
+        <ol>
+          <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
+          <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
+          <li>Confirmá tocando "Instalar".</li>
+        </ol>
+        <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
+      </div>
+    </details>
 
     <div class="sidebar-foot">
       <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
@@ -91,6 +117,11 @@
           <span class="index-seal">⚔</span>
           <h3>Asedio y defensa</h3>
           <p>Atacá y defendé fichas rivales adyacentes a las tuyas.</p>
+        </button>
+        <button class="index-card" data-target="catastrofes">
+          <span class="index-seal">☄</span>
+          <h3>Catástrofes</h3>
+          <p>Cinco cartas de desarrollo especiales que reordenan el tablero.</p>
         </button>
       </div>
     </section>
@@ -241,6 +272,52 @@
         <div class="callout">
           <span class="callout-tag">Importante</span>
           <p>La ficha sigue valiendo puntos mientras siga en el tablero. La carta de Caballero utilizada no afecta al ladrón.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATÁSTROFES -->
+    <section class="page" id="catastrofes">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Carta de catástrofe + 1 PV</p>
+        <h2 class="page-title">Catástrofes</h2>
+        <p class="page-lede">Cinco cartas especiales mezcladas entre las cartas de desarrollo. Cada una reordena al azar los números de un grupo de hexágonos del tablero.</p>
+      </header>
+
+      <div class="disaster-grid">
+        <div class="disaster-card">
+          <h3>Tornado <span>Ayuntamiento</span></h3>
+          <p>Todos los números se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+        </div>
+        <div class="disaster-card">
+          <h3>Sequía <span>Iglesia</span></h3>
+          <p>Los números con ovejas y ciudades en desierto se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+        </div>
+        <div class="disaster-card">
+          <h3>Tsunami <span>Biblioteca</span></h3>
+          <p>Los números con ciudades costeras se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+        </div>
+        <div class="disaster-card">
+          <h3>Incendio <span>Mercado</span></h3>
+          <p>Los números con trigos y maderas se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+        </div>
+        <div class="disaster-card">
+          <h3>Terremoto <span>Universidad</span></h3>
+          <p>Los números con piedras y barros se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-h">Reglas generales</h3>
+        <ul class="rule-list">
+          <li>Todas las cartas de catástrofe devuelven el ladrón al desierto.</li>
+          <li>Las cartas de Catástrofe se encuentran entre las cartas de desarrollo: son las cartas de 1 punto de victoria (se puede escribir, pegar o imprimir el nombre de la catástrofe sobre el diseño de esa carta).</li>
+          <li>Si un jugador compra 2 o más CDD en el mismo turno y obtiene dos o más cartas de Catástrofe, se resuelven en el orden de compra.</li>
+        </ul>
+
+        <div class="callout callout--warning">
+          <span class="callout-tag callout-tag--warn">Obligatorio</span>
+          <p>Si un jugador obtiene esta carta, debe revelarla inmediatamente. Si lo hace, sigue valiendo 1 PV; si no la revela, el punto es inválido.</p>
         </div>
       </div>
     </section>

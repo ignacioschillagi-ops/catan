@@ -105,7 +105,8 @@ const RULE_IMPACT = {
   "soborno": "medio",
   "consecuencias": "alto",
   "civilizaciones": "alto",
-  "asedio": "alto"
+  "asedio": "alto",
+  "catastrofes": "alto"
 };
 
 // ============================================================
