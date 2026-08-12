@@ -26,6 +26,31 @@ document.querySelectorAll("[data-target]").forEach(el => {
 menuToggle.addEventListener("click", () => sidebar.classList.toggle("is-open"));
 
 // ============================================================
+// MODAL - como instalar la app
+// ============================================================
+const installModal = document.getElementById("installModal");
+const installOpen = document.getElementById("installOpen");
+const installClose = document.getElementById("installClose");
+
+function openInstallModal() {
+  installModal.classList.add("is-open");
+}
+function closeInstallModal() {
+  installModal.classList.remove("is-open");
+}
+
+if (installOpen) installOpen.addEventListener("click", openInstallModal);
+if (installClose) installClose.addEventListener("click", closeInstallModal);
+if (installModal) {
+  installModal.addEventListener("click", (ev) => {
+    if (ev.target === installModal) closeInstallModal();
+  });
+}
+document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") closeInstallModal();
+});
+
+// ============================================================
 // INICIO - badges de impacto en las tarjetas del menú
 // ============================================================
 const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };

@@ -54,24 +54,7 @@
       ⬇ Bajar PDF para imprimir
     </a>
 
-    <details class="install-dropdown">
-      <summary>¿Cómo instalo la app?</summary>
-      <div class="install-content">
-        <p class="install-os"><strong>En iPhone (Safari)</strong></p>
-        <ol>
-          <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
-          <li>Elegí "Agregar a pantalla de inicio".</li>
-          <li>Confirmá el nombre y tocá "Agregar".</li>
-        </ol>
-        <p class="install-os"><strong>En Android (Chrome)</strong></p>
-        <ol>
-          <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
-          <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
-          <li>Confirmá tocando "Instalar".</li>
-        </ol>
-        <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
-      </div>
-    </details>
+    <button class="install-btn" id="installOpen" type="button">¿Cómo instalo la app?</button>
 
     <div class="sidebar-foot">
       <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
@@ -353,6 +336,30 @@
     </section>
 
   </main>
+</div>
+
+<!-- ===== MODAL: COMO INSTALAR ===== -->
+<div class="modal-overlay" id="installModal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
+    <button class="modal-close" id="installClose" aria-label="Cerrar">✕</button>
+    <h3 id="installModalTitle" class="modal-title">¿Cómo instalo la app?</h3>
+
+    <p class="install-os"><strong>En iPhone (Safari)</strong></p>
+    <ol>
+      <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
+      <li>Elegí "Agregar a pantalla de inicio".</li>
+      <li>Confirmá el nombre y tocá "Agregar".</li>
+    </ol>
+
+    <p class="install-os"><strong>En Android (Chrome)</strong></p>
+    <ol>
+      <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
+      <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
+      <li>Confirmá tocando "Instalar".</li>
+    </ol>
+
+    <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
+  </div>
 </div>
 
 <script src="data.js"></script>
