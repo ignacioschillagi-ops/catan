@@ -29,26 +29,7 @@
       <span class="nav-seal nav-seal--home">◈</span><span class="nav-label">Inicio</span>
     </button>
 
-    <nav class="nav" id="nav">
-      <button class="nav-item" data-target="dos-doce">
-        <span class="nav-seal">2·12</span><span class="nav-label">2 y 12</span>
-      </button>
-      <button class="nav-item" data-target="soborno">
-        <span class="nav-seal">☙</span><span class="nav-label">Soborno al ladrón</span>
-      </button>
-      <button class="nav-item" data-target="consecuencias">
-        <span class="nav-seal">🂡</span><span class="nav-label">Consecuencias del 7</span>
-      </button>
-      <button class="nav-item" data-target="civilizaciones">
-        <span class="nav-seal">⚜</span><span class="nav-label">Civilizaciones</span>
-      </button>
-      <button class="nav-item" data-target="asedio">
-        <span class="nav-seal">⚔</span><span class="nav-label">Asedio y defensa</span>
-      </button>
-      <button class="nav-item" data-target="catastrofes">
-        <span class="nav-seal">☄</span><span class="nav-label">Catástrofes</span>
-      </button>
-    </nav>
+    <nav class="nav" id="nav"><!-- generado por app.js desde RULES --></nav>
 
     <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
       ⬇ Bajar PDF para imprimir
@@ -75,38 +56,7 @@
         <p class="page-lede">Reglas pensadas para darle más dinámica al juego. Pueden jugarse por separado, usando las que crean convenientes para el desarrollo de la partida.</p>
       </header>
 
-      <div class="index-grid">
-        <button class="index-card" data-target="dos-doce">
-          <span class="index-seal">2·12</span>
-          <h3>2 y 12</h3>
-          <p>Ambos extremos del dado producen recursos por igual.</p>
-        </button>
-        <button class="index-card" data-target="soborno">
-          <span class="index-seal">☙</span>
-          <h3>Soborno al ladrón</h3>
-          <p>Pagá para reubicar al ladrón antes de que te bloquee.</p>
-        </button>
-        <button class="index-card" data-target="consecuencias">
-          <span class="index-seal">🂡</span>
-          <h3>Consecuencias del 7</h3>
-          <p>Un mazo de 30 cartas de reino decide qué pasa al sacar 7.</p>
-        </button>
-        <button class="index-card" data-target="civilizaciones">
-          <span class="index-seal">⚜</span>
-          <h3>Civilizaciones</h3>
-          <p>Seis pueblos, cada uno con una habilidad pasiva y una activa.</p>
-        </button>
-        <button class="index-card" data-target="asedio">
-          <span class="index-seal">⚔</span>
-          <h3>Asedio y defensa</h3>
-          <p>Atacá y defendé fichas rivales adyacentes a las tuyas.</p>
-        </button>
-        <button class="index-card" data-target="catastrofes">
-          <span class="index-seal">☄</span>
-          <h3>Catástrofes</h3>
-          <p>Cinco cartas de desarrollo especiales que reordenan el tablero.</p>
-        </button>
-      </div>
+      <div id="indexGroups"><!-- generado por app.js desde RULES, agrupado por impacto --></div>
     </section>
 
     <!-- 2 Y 12 -->
@@ -137,6 +87,96 @@
         <div class="callout">
           <span class="callout-tag">Importante</span>
           <p>Al moverlo de esta manera, no podés robar recursos de los jugadores que ocupen el nuevo hexágono, como lo harías con un 7.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RONDA DE CIERRE -->
+    <section class="page" id="ronda-cierre">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Cierre de partida</p>
+        <h2 class="page-title">Ronda de cierre</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Cuando un jugador alcanza los 10 puntos de victoria, la partida no termina en el acto: todos los demás jugadores completan un turno más antes de declarar ganador.</p>
+        <div class="callout">
+          <span class="callout-tag">Empate</span>
+          <p>Si más de un jugador llega a 10 puntos o más durante esta ronda final, gana quien tenga más puntos de victoria. Si el empate persiste, gana quien lo haya alcanzado primero en el orden de turno.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DADOS DOBLES -->
+    <section class="page" id="dados-dobles">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Regla simple</p>
+        <h2 class="page-title">Dados dobles</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Si el resultado de los dados es doble (1-1, 2-2, 3-3, 4-4, 5-5 o 6-6), se resuelve esa producción con normalidad y se tira de nuevo de inmediato, sumando el resultado nuevo aparte.</p>
+        <div class="callout">
+          <span class="callout-tag">Importante</span>
+          <p>Si la segunda tirada también resulta en un 7, se resuelve como cualquier 7 antes de continuar el turno.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAMINOS Y CABALLERO -->
+    <section class="page" id="combo-caminos">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Cartas de desarrollo</p>
+        <h2 class="page-title">Caminos y Caballero</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Podés jugar una carta de Construcción de Caminos y una carta de Caballero en el mismo turno.</p>
+        <div class="callout">
+          <span class="callout-tag">Ajuste de costo</span>
+          <p>Si las combinás así, la carta de Construcción de Caminos solo te da 1 camino gratis en lugar de 2.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUERTO PERDIDO -->
+    <section class="page" id="puerto-perdido">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Puertos</p>
+        <h2 class="page-title">Puerto perdido</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Si un poblado o ciudad con puerto es destruido (por ejemplo, por un Asedio no defendido), el puerto queda disponible.</p>
+        <ul class="rule-list">
+          <li>Cualquier jugador que construya un poblado nuevo en esa intersección recupera el puerto, sin importar quién lo tenía originalmente.</li>
+          <li>Mientras nadie construya ahí, el puerto queda inactivo: no beneficia a ningún jugador.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- MAESTRO DE PUERTOS -->
+    <section class="page" id="maestro-puertos">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Puntuación final</p>
+        <h2 class="page-title">Maestro de puertos</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Al final de la partida, el jugador con asentamientos en la mayor variedad de tipos de puerto distintos recibe 1 punto de victoria extra.</p>
+        <ul class="rule-list">
+          <li>Se cuenta variedad de tipos de puerto (por ejemplo: 2:1 madera, 2:1 trigo, 3:1 genérico), no la cantidad total de puertos.</li>
+          <li>En caso de empate en la cantidad de tipos distintos, ningún jugador recibe el punto.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CIUDAD EXPRÉS -->
+    <section class="page" id="ciudad-expres">
+      <header class="page-hero page-hero--sm">
+        <p class="page-eyebrow">Construcción</p>
+        <h2 class="page-title">Ciudad exprés</h2>
+      </header>
+      <div class="panel">
+        <p class="panel-lead">Al construir un poblado nuevo, podés descartar una carta de desarrollo de Punto de Victoria sin revelarla y subirlo directo a ciudad, sin pagar el costo normal de ciudad.</p>
+        <div class="callout">
+          <span class="callout-tag">Importante</span>
+          <p>Esto reemplaza el pago de la ciudad; el poblado igual debe pagarse con normalidad al construirse primero.</p>
         </div>
       </div>
     </section>
@@ -235,12 +275,12 @@
       <div class="cost-table-wrap">
         <table class="cost-table">
           <thead>
-            <tr><th>Ficha</th><th>ATACAR</th><th>DEFENDER</th></tr>
+            <tr><th>Ficha</th><th>Costo atacar</th><th>Costo defender</th></tr>
           </thead>
           <tbody>
-            <tr><td>Camino</td><td>1 Caballero ⚔️ + el valor de un camino ➖ (2)</td><td>1 Caballero ⚔️</td></tr>
-            <tr><td>Poblado</td><td>1 Caballero ⚔️ + el valor de un poblado 🛖 (4)</td><td>1 Caballero ⚔️ + 1 Arcilla 🧱</td></tr>
-            <tr><td>Ciudad</td><td>1 Caballero ⚔️ + el valor de una ciudad 🏰 (5)</td><td>1 Caballero ⚔️ + 2 Piedras 🪨🪨</td></tr>
+            <tr><td>Camino</td><td>1 Caballero + 2 recursos</td><td>1 Caballero</td></tr>
+            <tr><td>Poblado</td><td>1 Caballero + 4 recursos</td><td>1 Caballero + 1 Arcilla</td></tr>
+            <tr><td>Ciudad</td><td>1 Caballero + 5 recursos</td><td>1 Caballero + 2 Piedras</td></tr>
           </tbody>
         </table>
       </div>

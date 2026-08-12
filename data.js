@@ -98,16 +98,23 @@ const CIVILIZATIONS = [
 ];
 
 // ============================================================
-// IMPACTO EN LA JUGABILIDAD - para las tarjetas de Inicio
+// CATALOGO DE REGLAS - fuente unica para el menu, Inicio y su impacto
+// Agregar una regla nueva = sumar un objeto aca (mas su seccion en el HTML)
 // ============================================================
-const RULE_IMPACT = {
-  "dos-doce": "bajo",
-  "soborno": "medio",
-  "consecuencias": "alto",
-  "civilizaciones": "alto",
-  "asedio": "alto",
-  "catastrofes": "alto"
-};
+const RULES = [
+  { id: "dos-doce", title: "2 y 12", desc: "Ambos extremos del dado producen recursos por igual.", seal: "2·12", impact: "bajo" },
+  { id: "ronda-cierre", title: "Ronda de cierre", desc: "Todos juegan un turno más cuando alguien llega a 10 puntos.", seal: "⌛", impact: "bajo" },
+  { id: "dados-dobles", title: "Dados dobles", desc: "Sacar un doble te da una tirada extra inmediata.", seal: "⚅", impact: "bajo" },
+  { id: "combo-caminos", title: "Caminos y Caballero", desc: "Jugá ambas cartas en el mismo turno, con un ajuste de costo.", seal: "⚒", impact: "bajo" },
+  { id: "puerto-perdido", title: "Puerto perdido", desc: "Un puerto destruido queda libre para quien construya ahí.", seal: "⚓", impact: "bajo" },
+  { id: "soborno", title: "Soborno al ladrón", desc: "Pagá para reubicar al ladrón antes de que te bloquee.", seal: "☙", impact: "medio" },
+  { id: "maestro-puertos", title: "Maestro de puertos", desc: "Un punto extra por diversificar tus puertos.", seal: "⛵", impact: "medio" },
+  { id: "ciudad-expres", title: "Ciudad exprés", desc: "Convertí una carta de Punto de Victoria en una ciudad instantánea.", seal: "⌂", impact: "medio" },
+  { id: "consecuencias", title: "Consecuencias del 7", desc: "Un mazo de 30 cartas de reino decide qué pasa al sacar 7.", seal: "🂡", impact: "alto" },
+  { id: "civilizaciones", title: "Civilizaciones", desc: "Seis pueblos, cada uno con una habilidad pasiva y una activa.", seal: "⚜", impact: "alto" },
+  { id: "asedio", title: "Asedio y defensa", desc: "Atacá y defendé fichas rivales adyacentes a las tuyas.", seal: "⚔", impact: "alto" },
+  { id: "catastrofes", title: "Catástrofes", desc: "Cinco cartas especiales que reordenan o inhabilitan hexágonos.", seal: "☄", impact: "alto" }
+];
 
 // ============================================================
 // MAZO - CONSECUENCIAS DEL 7 (30 cartas)

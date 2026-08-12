@@ -61,27 +61,29 @@ html, body {
     radial-gradient(circle at 20% 0%, rgba(255,255,255,0.05), transparent 60%),
     linear-gradient(180deg, var(--leather) 0%, var(--leather-deep) 100%);
   color: var(--parchment);
-  padding: 2rem 1.25rem 1.5rem;
+  padding: 1.4rem 1.1rem 1.1rem;
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   border-right: 3px solid var(--leather-shadow);
   box-shadow: inset -8px 0 24px -16px rgba(0,0,0,0.6);
 }
 
 .crest {
   text-align: center;
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.25rem;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
   border-bottom: 1px solid rgba(215, 169, 79, 0.35);
 }
 
 .crest-mark {
   width: 128px;
   height: auto;
-  margin: 0 auto 0.6rem;
+  margin: 0 auto 0.2rem;
   display: block;
   filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
 }
@@ -98,22 +100,21 @@ html, body {
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  flex: 1;
+  gap: 0.12rem;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.6rem;
   background: transparent;
   border: 1px solid transparent;
   color: rgba(232, 220, 193, 0.72);
   font-family: var(--font-display);
-  font-size: 0.78rem;
-  letter-spacing: 0.4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.3px;
   text-align: left;
-  padding: 0.65rem 0.75rem;
+  padding: 0.42rem 0.65rem;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -130,27 +131,28 @@ html, body {
 
 .nav-seal {
   flex-shrink: 0;
-  width: 26px;
-  height: 26px;
+  width: 21px;
+  height: 21px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, var(--wax) 0%, var(--wax-deep) 100%);
   color: var(--parchment);
-  font-size: 0.62rem;
+  font-size: 0.56rem;
   font-weight: 700;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.4);
 }
 
 /* Inicio: mas jerarquia que el resto de la navegacion */
 .nav-item--home {
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  padding: 0.85rem 0.9rem;
-  margin-bottom: 1.1rem;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.75rem;
   background: rgba(215, 169, 79, 0.1);
   border: 1px solid rgba(215, 169, 79, 0.3);
   border-radius: 8px;
+  flex-shrink: 0;
 }
 .nav-item--home.is-active,
 .nav-item--home:hover {
@@ -159,9 +161,9 @@ html, body {
   color: var(--gold-bright);
 }
 .nav-seal--home {
-  width: 30px;
-  height: 30px;
-  font-size: 0.85rem;
+  width: 25px;
+  height: 25px;
+  font-size: 0.75rem;
   background: radial-gradient(circle at 30% 30%, var(--gold-bright) 0%, var(--gold) 100%);
   color: var(--leather-shadow);
 }
@@ -171,14 +173,15 @@ html, body {
   display: block;
   text-align: center;
   font-family: var(--font-display);
-  font-size: 0.74rem;
-  letter-spacing: 0.5px;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
   color: var(--leather-shadow);
   background: linear-gradient(160deg, var(--gold-bright), var(--gold));
   text-decoration: none;
-  padding: 0.7rem 0.9rem;
+  padding: 0.55rem 0.8rem;
   border-radius: 8px;
-  margin: 0.5rem 0 1rem;
+  margin: 0.9rem 0 0.5rem;
+  flex-shrink: 0;
   box-shadow: 0 2px 0 var(--gold), 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.1s ease;
 }
@@ -188,17 +191,18 @@ html, body {
 .install-btn {
   display: block;
   width: 100%;
-  margin: 0 0 1rem;
-  padding: 0.65rem 0.9rem;
+  margin: 0 0 0.7rem;
+  padding: 0.5rem 0.8rem;
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(215, 169, 79, 0.25);
   border-radius: 8px;
   font-family: var(--font-display);
-  font-size: 0.74rem;
-  letter-spacing: 0.4px;
+  font-size: 0.7rem;
+  letter-spacing: 0.3px;
   color: rgba(232, 220, 193, 0.8);
   text-align: left;
   cursor: pointer;
+  flex-shrink: 0;
   transition: background 0.15s ease, color 0.15s ease;
 }
 .install-btn::after {
@@ -320,8 +324,9 @@ html, body {
 .foot-link:hover { text-decoration: underline; }
 
 .sidebar-foot {
-  padding-top: 1rem;
+  padding-top: 0.7rem;
   border-top: 1px solid rgba(215, 169, 79, 0.2);
+  flex-shrink: 0;
 }
 
 .menu-toggle {
@@ -396,8 +401,24 @@ html, body {
 }
 
 /* ============================================================
-   INDEX CARDS (home)
+   INDEX GROUPS + CARDS (home)
    ============================================================ */
+.index-group { margin-bottom: 2.25rem; }
+.index-group:last-child { margin-bottom: 0; }
+
+.index-group-title {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-left: 0.9rem;
+  border-left: 4px solid var(--gold);
+}
+.index-group-title--bajo { border-left-color: #4d8a3a; color: #35602a; }
+.index-group-title--medio { border-left-color: #c08a2e; color: #8a5a1f; }
+.index-group-title--alto { border-left-color: var(--wax); color: var(--wax-deep); }
+
 .index-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -419,26 +440,21 @@ html, body {
   box-shadow: var(--shadow-card);
   border-color: var(--gold);
 }
-.index-card--ghost {
-  cursor: default;
-  border-style: dashed;
-  opacity: 0.7;
-}
-.index-card--ghost:hover { transform: none; box-shadow: none; border-color: rgba(92,58,26,0.18); }
 
 .index-seal {
   display: inline-grid;
   place-items: center;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 6px;
+  min-width: 46px;
+  height: 46px;
+  padding: 0 8px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, var(--wax), var(--wax-deep));
   color: var(--parchment);
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .index-card h3 {
@@ -450,22 +466,9 @@ html, body {
 .index-card p {
   font-size: 0.95rem;
   color: var(--ink-soft);
-  margin: 0 0 0.9rem;
+  margin: 0;
   line-height: 1.45;
 }
-
-.impact-badge {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-size: 0.62rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: 20px;
-}
-.impact-badge.impact-bajo { background: #dcead1; color: #35602a; }
-.impact-badge.impact-medio { background: #f3e2c3; color: #8a5a1f; }
-.impact-badge.impact-alto { background: #f0d4cd; color: #8a2f1f; }
 
 /* ============================================================
    GENERIC PANEL
@@ -860,25 +863,21 @@ html, body {
 }
 .disaster-card {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  gap: 0;
+  align-items: stretch;
   background: rgba(255,255,255,0.32);
   border: 1px solid rgba(92,58,26,0.18);
   border-left: 3px solid var(--wax);
   border-radius: 8px;
-  padding: 1rem 1.1rem;
+  overflow: hidden;
 }
 
 .disaster-image {
   position: relative;
   flex-shrink: 0;
-  width: 70px;
   aspect-ratio: 11 / 17;
-  border-radius: 5px;
-  overflow: hidden;
-  border: 2px solid var(--leather);
+  align-self: stretch;
   background: linear-gradient(160deg, var(--leather), var(--leather-deep));
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 .disaster-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .disaster-placeholder {
@@ -891,7 +890,7 @@ html, body {
 }
 .disaster-placeholder .icon { font-size: 1.3rem; }
 
-.disaster-body { flex: 1; min-width: 0; }
+.disaster-body { flex: 1; min-width: 0; padding: 1rem 1.1rem; }
 .disaster-card h3 {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -918,7 +917,7 @@ html, body {
 
 @media (max-width: 500px) {
   .disaster-card { flex-direction: column; }
-  .disaster-image { width: 56px; }
+  .disaster-image { width: 100%; aspect-ratio: 17 / 8; }
 }
 
 /* ============================================================

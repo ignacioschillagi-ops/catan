@@ -1,4 +1,48 @@
 // ============================================================
+// RENDER NAV (sidebar) + INICIO (agrupado por impacto)
+// desde el catálogo único RULES en data.js
+// ============================================================
+const navContainer = document.getElementById("nav");
+RULES.forEach(rule => {
+  const btn = document.createElement("button");
+  btn.className = "nav-item";
+  btn.dataset.target = rule.id;
+  btn.innerHTML = `<span class="nav-seal">${rule.seal}</span><span class="nav-label">${rule.title}</span>`;
+  navContainer.appendChild(btn);
+});
+
+const impactOrder = ["bajo", "medio", "alto"];
+const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };
+const indexGroups = document.getElementById("indexGroups");
+
+impactOrder.forEach(level => {
+  const rulesInLevel = RULES.filter(r => r.impact === level);
+  if (!rulesInLevel.length) return;
+
+  const group = document.createElement("div");
+  group.className = "index-group";
+  group.innerHTML = `<h3 class="index-group-title index-group-title--${level}">${impactLabels[level]}</h3>`;
+
+  const grid = document.createElement("div");
+  grid.className = "index-grid";
+
+  rulesInLevel.forEach(rule => {
+    const card = document.createElement("button");
+    card.className = "index-card";
+    card.dataset.target = rule.id;
+    card.innerHTML = `
+      <span class="index-seal">${rule.seal}</span>
+      <h3>${rule.title}</h3>
+      <p>${rule.desc}</p>
+    `;
+    grid.appendChild(card);
+  });
+
+  group.appendChild(grid);
+  indexGroups.appendChild(group);
+});
+
+// ============================================================
 // NAVIGATION
 // ============================================================
 const navItems = document.querySelectorAll(".nav-item");
@@ -48,21 +92,6 @@ if (installModal) {
 }
 document.addEventListener("keydown", (ev) => {
   if (ev.key === "Escape") closeInstallModal();
-});
-
-// ============================================================
-// INICIO - badges de impacto en las tarjetas del menú
-// ============================================================
-const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };
-
-document.querySelectorAll(".index-card[data-target]").forEach(card => {
-  const target = card.dataset.target;
-  const level = RULE_IMPACT[target];
-  if (!level) return;
-  const badge = document.createElement("span");
-  badge.className = `impact-badge impact-${level}`;
-  badge.textContent = impactLabels[level];
-  card.appendChild(badge);
 });
 
 // ============================================================
