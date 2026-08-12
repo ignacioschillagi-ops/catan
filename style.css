@@ -304,6 +304,46 @@ html, body {
   line-height: 1.5;
 }
 
+/* ============================================================
+   LIGHTBOX — imagen ampliada (catástrofes)
+   ============================================================ */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 6, 3, 0.88);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  cursor: zoom-out;
+}
+.lightbox-overlay.is-open { display: flex; }
+
+.lightbox-img {
+  max-width: min(90vw, 480px);
+  max-height: 85vh;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  animation: modalIn 0.2s ease;
+  cursor: default;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.4);
+  color: var(--parchment);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: rgba(0,0,0,0.6); }
+
 .foot-msg {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -862,9 +902,8 @@ html, body {
   margin-bottom: 1.5rem;
 }
 .disaster-card {
-  display: flex;
-  gap: 0;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: 100px 1fr;
   background: rgba(255,255,255,0.32);
   border: 1px solid rgba(92,58,26,0.18);
   border-left: 3px solid var(--wax);
@@ -874,12 +913,20 @@ html, body {
 
 .disaster-image {
   position: relative;
-  flex-shrink: 0;
-  aspect-ratio: 11 / 17;
-  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
   background: linear-gradient(160deg, var(--leather), var(--leather-deep));
+  cursor: pointer;
 }
-.disaster-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.disaster-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .disaster-placeholder {
   position: absolute;
   inset: 0;
@@ -890,7 +937,7 @@ html, body {
 }
 .disaster-placeholder .icon { font-size: 1.3rem; }
 
-.disaster-body { flex: 1; min-width: 0; padding: 1rem 1.1rem; }
+.disaster-body { min-width: 0; padding: 1rem 1.1rem; align-self: center; }
 .disaster-card h3 {
   font-family: var(--font-display);
   font-size: 1rem;
@@ -916,8 +963,8 @@ html, body {
 }
 
 @media (max-width: 500px) {
-  .disaster-card { flex-direction: column; }
-  .disaster-image { width: 100%; aspect-ratio: 17 / 8; }
+  .disaster-card { grid-template-columns: 1fr; }
+  .disaster-image { min-height: 170px; }
 }
 
 /* ============================================================
