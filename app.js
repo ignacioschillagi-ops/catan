@@ -175,13 +175,45 @@ document.querySelectorAll(".disaster-image").forEach(box => {
   const img = box.querySelector("img");
   const placeholder = box.querySelector(".disaster-placeholder");
   if (!img) return;
+  let loaded = false;
   img.addEventListener("error", () => {
+    loaded = false;
     img.style.display = "none";
     placeholder.style.display = "flex";
   });
   img.addEventListener("load", () => {
+    loaded = true;
     placeholder.style.display = "none";
   });
+  box.addEventListener("click", () => {
+    if (loaded) openLightbox(img.src, img.alt);
+  });
+});
+
+// ============================================================
+// LIGHTBOX - amplia una imagen en un popup
+// ============================================================
+const lightboxModal = document.getElementById("lightboxModal");
+const lightboxImg = document.getElementById("lightboxImg");
+const lightboxClose = document.getElementById("lightboxClose");
+
+function openLightbox(src, alt) {
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || "";
+  lightboxModal.classList.add("is-open");
+}
+function closeLightbox() {
+  lightboxModal.classList.remove("is-open");
+}
+
+if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+if (lightboxModal) {
+  lightboxModal.addEventListener("click", (ev) => {
+    if (ev.target === lightboxModal) closeLightbox();
+  });
+}
+document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") closeLightbox();
 });
 
 // ============================================================
