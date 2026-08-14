@@ -16,47 +16,57 @@
 </head>
 <body>
 
-<div class="app">
+<div class="app-shell">
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar" id="sidebar">
-    <div class="crest">
-      <img class="crest-mark" src="images/logo.svg" alt="World of Catan">
-      <p class="crest-sub">Reglas de la casa</p>
+  <header class="topbar">
+    <img class="topbar-logo" src="images/logo.svg" alt="World of Catan">
+    <div class="topbar-text">
+      <h1 class="topbar-title" id="topbarTitle">Reglas</h1>
+      <p class="topbar-sub">World of Catan — reglas de la casa</p>
     </div>
+  </header>
 
-    <button class="nav-item nav-item--home is-active" data-target="inicio">
-      <span class="nav-seal nav-seal--home">◈</span><span class="nav-label">Inicio</span>
-    </button>
+  <main class="main" id="main">
 
-    <nav class="nav" id="nav"><!-- generado por app.js desde RULES --></nav>
-
-    <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
-      ⬇ Bajar PDF para imprimir
-    </a>
-
-    <button class="install-btn" id="installOpen" type="button">¿Cómo instalo la app?</button>
-
-    <div class="sidebar-foot">
-      <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
-      <a class="foot-link" href="https://yosoyjoe.vercel.app/" target="_blank" rel="noopener">@yosoyjoe</a>
-    </div>
-  </aside>
-
-  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
-
-  <!-- ===== MAIN ===== -->
-  <main class="main">
-
-    <!-- INICIO -->
-    <section class="page is-active" id="inicio">
+    <!-- TAB: REGLAS -->
+    <section class="page is-active" id="tab-reglas">
       <header class="page-hero">
         <p class="page-eyebrow">Compendio de variantes</p>
-        <h2 class="page-title">Reglas de World of Catan</h2>
-        <p class="page-lede">Reglas pensadas para darle más dinámica al juego. Pueden jugarse por separado, usando las que crean convenientes para el desarrollo de la partida.</p>
+        <h2 class="page-title">Elegí tus reglas</h2>
+        <p class="page-lede">Tocá una regla para leerla completa, o sumala directo con el botón +. Podés jugarlas por separado, combinando las que quieras.</p>
+      </header>
+      <div id="reglasList"><!-- generado por app.js desde RULES --></div>
+    </section>
+
+    <!-- TAB: CATANAZO (tu partida) -->
+    <section class="page" id="tab-partida">
+      <header class="page-hero">
+        <p class="page-eyebrow">Tu selección</p>
+        <h2 class="page-title">Catanazo</h2>
+        <p class="page-lede">Las reglas que sumaste para esta partida, ordenadas de menor a mayor impacto. Tocá cualquiera para repasarla durante el juego.</p>
+      </header>
+      <div id="partidaList"><!-- generado por app.js --></div>
+    </section>
+
+    <!-- TAB: CONFIGURACIÓN -->
+    <section class="page" id="tab-config">
+      <header class="page-hero">
+        <p class="page-eyebrow">Ajustes</p>
+        <h2 class="page-title">Configuración</h2>
       </header>
 
-      <div id="indexGroups"><!-- generado por app.js desde RULES, agrupado por impacto --></div>
+      <div class="panel config-panel">
+        <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
+          ⬇ Bajar PDF para imprimir
+        </a>
+        <button class="install-btn" id="installOpen" type="button">¿Cómo instalo la app?</button>
+        <button class="install-btn install-btn--danger" id="resetSelection" type="button">Vaciar Catanazo</button>
+      </div>
+
+      <div class="config-foot">
+        <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
+        <a class="foot-link" href="https://yosoyjoe.vercel.app/" target="_blank" rel="noopener">@yosoyjoe</a>
+      </div>
     </section>
 
     <!-- 2 Y 12 -->
@@ -121,36 +131,6 @@
       </div>
     </section>
 
-    <!-- CAMINOS Y CABALLERO -->
-    <section class="page" id="combo-caminos">
-      <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Cartas de desarrollo</p>
-        <h2 class="page-title">Caminos y Caballero</h2>
-      </header>
-      <div class="panel">
-        <p class="panel-lead">Podés jugar una carta de Construcción de Caminos y una carta de Caballero en el mismo turno.</p>
-        <div class="callout">
-          <span class="callout-tag">Ajuste de costo</span>
-          <p>Si las combinás así, la carta de Construcción de Caminos solo te da 1 camino gratis en lugar de 2.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PUERTO PERDIDO -->
-    <section class="page" id="puerto-perdido">
-      <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Puertos</p>
-        <h2 class="page-title">Puerto perdido</h2>
-      </header>
-      <div class="panel">
-        <p class="panel-lead">Si un poblado o ciudad con puerto es destruido (por ejemplo, por un Asedio no defendido), el puerto queda disponible.</p>
-        <ul class="rule-list">
-          <li>Cualquier jugador que construya un poblado nuevo en esa intersección recupera el puerto, sin importar quién lo tenía originalmente.</li>
-          <li>Mientras nadie construya ahí, el puerto queda inactivo: no beneficia a ningún jugador.</li>
-        </ul>
-      </div>
-    </section>
-
     <!-- MAESTRO DE PUERTOS -->
     <section class="page" id="maestro-puertos">
       <header class="page-hero page-hero--sm">
@@ -189,11 +169,6 @@
         <p class="page-lede">Al sacar un 7, además de mover el ladrón con normalidad, se puede robar una carta del mazo del reino para ver qué sucede este turno. El ladrón se mueve igual, salvo que la carta indique lo contrario.</p>
       </header>
 
-      <div class="callout callout--warning">
-        <span class="callout-tag callout-tag--warn">Incompatible</span>
-        <p>Esta regla no es compatible con <strong>Civilizaciones</strong>. Se juega una de las dos, no ambas en la misma partida.</p>
-      </div>
-
       <div class="deck-panel">
         <div class="deck-panel-top">
           <span class="deck-count" id="deckCounter">Carta 0 de 30</span>
@@ -221,11 +196,6 @@
         <h2 class="page-title">Civilizaciones</h2>
         <p class="page-lede">Existen 6 civilizaciones distintas, con 3 tipos distintos de construcción. Cada una posee dos habilidades: una pasiva y otra activa.</p>
       </header>
-
-      <div class="callout callout--warning">
-        <span class="callout-tag callout-tag--warn">Incompatible</span>
-        <p>Esta regla no es compatible con <strong>Consecuencias del 7</strong>. Se juega una de las dos, no ambas en la misma partida.</p>
-      </div>
 
       <div class="panel panel--split">
         <div>
@@ -376,6 +346,24 @@
     </section>
 
   </main>
+
+  <nav class="bottom-nav">
+    <button class="bottom-tab is-active" data-tab="tab-reglas">
+      <span class="bottom-icon">☰</span>
+      <span class="bottom-label">Reglas</span>
+    </button>
+    <button class="bottom-tab" data-tab="tab-partida">
+      <span class="bottom-icon-wrap">
+        <span class="bottom-icon">⚔</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </span>
+      <span class="bottom-label">Catanazo</span>
+    </button>
+    <button class="bottom-tab" data-tab="tab-config">
+      <span class="bottom-icon">⚙</span>
+      <span class="bottom-label">Configuración</span>
+    </button>
+  </nav>
 </div>
 
 <!-- ===== MODAL: COMO INSTALAR ===== -->

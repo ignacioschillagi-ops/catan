@@ -1,74 +1,282 @@
 // ============================================================
-// RENDER NAV (sidebar) + INICIO (agrupado por impacto)
-// desde el catálogo único RULES en data.js
+// ESTADO: reglas seleccionadas para "Catanazo" (en memoria, por sesión)
 // ============================================================
-const navContainer = document.getElementById("nav");
-RULES.forEach(rule => {
-  const btn = document.createElement("button");
-  btn.className = "nav-item";
-  btn.dataset.target = rule.id;
-  btn.innerHTML = `<span class="nav-seal">${rule.seal}</span><span class="nav-label">${rule.title}</span>`;
-  navContainer.appendChild(btn);
-});
-
+const selectedRuleIds = new Set();
 const impactOrder = ["bajo", "medio", "alto"];
 const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };
-const indexGroups = document.getElementById("indexGroups");
 
-impactOrder.forEach(level => {
-  const rulesInLevel = RULES.filter(r => r.impact === level);
-  if (!rulesInLevel.length) return;
+function getRule(id) {
+  return RULES.find(r => r.id === id);
+}
 
-  const group = document.createElement("div");
-  group.className = "index-group";
-  group.innerHTML = `<h3 class="index-group-title index-group-title--${level}">${impactLabels[level]}</h3>`;
+// una regla esta bloqueada si alguna de sus incompatibles ya esta en el carrito
+function isBlocked(rule) {
+  if (selectedRuleIds.has(rule.id)) return false;
+  return rule.incompatible.some(id => selectedRuleIds.has(id));
+}
 
-  const grid = document.createElement("div");
-  grid.className = "index-grid";
+function addRule(id) {
+  const rule = getRule(id);
+  if (!rule || isBlocked(rule)) return;
+  selectedRuleIds.add(id);
+  refreshAll();
+}
 
-  rulesInLevel.forEach(rule => {
-    const card = document.createElement("button");
-    card.className = "index-card";
-    card.dataset.target = rule.id;
-    card.innerHTML = `
-      <span class="index-seal">${rule.seal}</span>
-      <h3>${rule.title}</h3>
-      <p>${rule.desc}</p>
-    `;
-    grid.appendChild(card);
-  });
-
-  group.appendChild(grid);
-  indexGroups.appendChild(group);
-});
+function removeRule(id) {
+  selectedRuleIds.delete(id);
+  refreshAll();
+}
 
 // ============================================================
-// NAVIGATION
+// TABS (Reglas / Catanazo / Configuración) + paginas de detalle
 // ============================================================
-const navItems = document.querySelectorAll(".nav-item");
-const pages = document.querySelectorAll(".page");
-const sidebar = document.getElementById("sidebar");
-const menuToggle = document.getElementById("menuToggle");
+const allPages = document.querySelectorAll(".page");
+const bottomTabs = document.querySelectorAll(".bottom-tab");
+const topbarTitle = document.getElementById("topbarTitle");
+const tabTitles = { "tab-reglas": "Reglas", "tab-partida": "Catanazo", "tab-config": "Configuración" };
 
-function goToPage(target) {
-  pages.forEach(p => p.classList.toggle("is-active", p.id === target));
-  navItems.forEach(n => n.classList.toggle("is-active", n.dataset.target === target));
-  sidebar.classList.remove("is-open");
+function showPage(id) {
+  allPages.forEach(p => p.classList.toggle("is-active", p.id === id));
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-navItems.forEach(btn => {
-  btn.addEventListener("click", () => goToPage(btn.dataset.target));
+function goToTab(tabId) {
+  showPage(tabId);
+  bottomTabs.forEach(t => t.classList.toggle("is-active", t.dataset.tab === tabId));
+  topbarTitle.textContent = tabTitles[tabId] || "Reglas";
+}
+
+function goToRule(ruleId) {
+  const rule = getRule(ruleId);
+  if (!rule) return;
+  showPage(ruleId);
+  topbarTitle.textContent = rule.title;
+  refreshRuleActions(ruleId);
+}
+
+bottomTabs.forEach(tab => {
+  tab.addEventListener("click", () => goToTab(tab.dataset.tab));
 });
 
-document.querySelectorAll("[data-target]").forEach(el => {
-  if (!el.classList.contains("nav-item")) {
-    el.addEventListener("click", () => goToPage(el.dataset.target));
+// ============================================================
+// RENDER: lista de Reglas (agrupada por impacto, con boton +)
+// ============================================================
+const reglasList = document.getElementById("reglasList");
+
+function renderReglasList() {
+  reglasList.innerHTML = "";
+  impactOrder.forEach(level => {
+    const rulesInLevel = RULES.filter(r => r.impact === level);
+    if (!rulesInLevel.length) return;
+
+    const group = document.createElement("div");
+    group.className = "rule-group";
+    group.innerHTML = `<h3 class="rule-group-title rule-group-title--${level}">${impactLabels[level]}</h3>`;
+
+    rulesInLevel.forEach(rule => {
+      const added = selectedRuleIds.has(rule.id);
+      const blocked = isBlocked(rule);
+
+      const row = document.createElement("div");
+      row.className = "rule-row" + (blocked ? " is-disabled" : "");
+      row.innerHTML = `
+        <button class="rule-row-body" data-open="${rule.id}">
+          <span class="rule-row-seal">${rule.seal}</span>
+          <span class="rule-row-text">
+            <h4>${rule.title}</h4>
+            <p>${rule.desc}</p>
+            ${blocked ? `<span class="rule-row-note">No compatible</span>` : ""}
+          </span>
+        </button>
+        <button class="rule-row-add${added ? " is-added" : ""}" data-add="${rule.id}" ${blocked ? "disabled" : ""}>
+          ${added ? "✓" : "+"}
+        </button>
+      `;
+      group.appendChild(row);
+    });
+
+    reglasList.appendChild(group);
+  });
+
+  reglasList.querySelectorAll("[data-open]").forEach(el => {
+    el.addEventListener("click", () => goToRule(el.dataset.open));
+  });
+  reglasList.querySelectorAll("[data-add]").forEach(el => {
+    el.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = el.dataset.add;
+      if (selectedRuleIds.has(id)) {
+        removeRule(id);
+      } else {
+        addRule(id);
+      }
+    });
+  });
+}
+
+// ============================================================
+// RENDER: lista de Catanazo (tu partida) - checklist prolijo
+// ============================================================
+const partidaList = document.getElementById("partidaList");
+
+function renderPartidaList() {
+  partidaList.innerHTML = "";
+
+  if (selectedRuleIds.size === 0) {
+    partidaList.innerHTML = `
+      <div class="partida-empty">
+        <span class="icon">⚔</span>
+        <p>Todavía no armaste tu Catanazo.<br>Andá a Reglas y sumá las que quieras jugar.</p>
+        <button class="btn-seal" data-goto-reglas>Ver reglas</button>
+      </div>
+    `;
+    partidaList.querySelector("[data-goto-reglas]").addEventListener("click", () => goToTab("tab-reglas"));
+    return;
   }
+
+  impactOrder.forEach(level => {
+    const rulesInLevel = RULES.filter(r => r.impact === level && selectedRuleIds.has(r.id));
+    if (!rulesInLevel.length) return;
+
+    const group = document.createElement("div");
+    group.className = "rule-group";
+    group.innerHTML = `<h3 class="rule-group-title rule-group-title--${level}">${impactLabels[level]}</h3>`;
+
+    rulesInLevel.forEach(rule => {
+      const row = document.createElement("div");
+      row.className = "partida-row";
+      row.dataset.open = rule.id;
+      row.innerHTML = `
+        <span class="partida-row-seal">${rule.seal}</span>
+        <span class="partida-row-title">${rule.title}</span>
+        <span class="partida-row-impact partida-row-impact--${level}">${level}</span>
+        <button class="partida-row-remove" data-remove="${rule.id}" title="Quitar">✕</button>
+      `;
+      group.appendChild(row);
+    });
+
+    partidaList.appendChild(group);
+  });
+
+  partidaList.querySelectorAll("[data-open]").forEach(el => {
+    el.addEventListener("click", (ev) => {
+      if (ev.target.closest("[data-remove]")) return;
+      goToRule(el.dataset.open);
+    });
+  });
+  partidaList.querySelectorAll("[data-remove]").forEach(el => {
+    el.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      removeRule(el.dataset.remove);
+    });
+  });
+}
+
+// ============================================================
+// RENDER: badge del carrito en la pestaña Catanazo
+// ============================================================
+const cartBadge = document.getElementById("cartBadge");
+function updateCartBadge() {
+  const count = selectedRuleIds.size;
+  cartBadge.textContent = count;
+  cartBadge.classList.toggle("is-visible", count > 0);
+}
+
+// ============================================================
+// RENDER: aviso de compatibilidad + botones de accion en cada
+// pagina de detalle de regla (Jugar regla / Volver / Quitar)
+// ============================================================
+RULES.forEach(rule => {
+  const section = document.getElementById(rule.id);
+  if (!section) return;
+
+  // aviso de compatibilidad, insertado una vez despues del header
+  if (rule.incompatible.length) {
+    const notice = document.createElement("div");
+    notice.className = "compat-notice";
+    notice.dataset.rule = rule.id;
+    const header = section.querySelector(".page-hero");
+    if (header) header.insertAdjacentElement("afterend", notice);
+  }
+
+  // botones de accion, al final de la seccion
+  const actions = document.createElement("div");
+  actions.className = "rule-actions";
+  actions.dataset.ruleId = rule.id;
+  actions.innerHTML = `
+    <button class="btn-play-rule" data-play="${rule.id}"></button>
+    <button class="btn-back-rules" data-back>← Volver a todas las reglas</button>
+  `;
+  section.appendChild(actions);
+
+  actions.querySelector("[data-back]").addEventListener("click", () => goToTab("tab-reglas"));
+  actions.querySelector("[data-play]").addEventListener("click", () => {
+    if (selectedRuleIds.has(rule.id)) {
+      removeRule(rule.id);
+    } else {
+      if (isBlocked(rule)) return;
+      addRule(rule.id);
+      goToTab("tab-reglas");
+    }
+  });
 });
 
-menuToggle.addEventListener("click", () => sidebar.classList.toggle("is-open"));
+function refreshRuleActions(ruleId) {
+  const rule = getRule(ruleId);
+  if (!rule) return;
+  const section = document.getElementById(ruleId);
+  if (!section) return;
 
+  // aviso de compatibilidad
+  const notice = section.querySelector(".compat-notice");
+  if (notice) {
+    const names = rule.incompatible.map(id => getRule(id).title).join(", ");
+    const conflict = rule.incompatible.some(id => selectedRuleIds.has(id));
+    notice.classList.toggle("is-conflict", conflict);
+    notice.innerHTML = `
+      <span class="compat-notice-tag">${conflict ? "Conflicto" : "Incompatible"}</span>
+      <p>Esta regla no es compatible con <strong>${names}</strong>. Se juega una de las dos, no ambas en la misma partida.${conflict ? " Ya tenés esa regla en tu Catanazo — quitala primero si querés sumar esta." : ""}</p>
+    `;
+  }
+
+  // botones
+  const playBtn = section.querySelector("[data-play]");
+  const added = selectedRuleIds.has(ruleId);
+  const blocked = !added && isBlocked(rule);
+
+  playBtn.classList.toggle("is-added", added);
+  playBtn.disabled = blocked;
+  playBtn.textContent = added ? "✕ Quitar regla" : (blocked ? "No compatible con tu Catanazo" : "+ Jugar regla");
+}
+
+// ============================================================
+// refreshAll: se llama cada vez que cambia la seleccion
+// ============================================================
+function refreshAll() {
+  renderReglasList();
+  renderPartidaList();
+  updateCartBadge();
+  const activeRulePage = document.querySelector(".page.is-active");
+  if (activeRulePage && RULES.some(r => r.id === activeRulePage.id)) {
+    refreshRuleActions(activeRulePage.id);
+  }
+}
+
+// ============================================================
+// CONFIGURACIÓN: vaciar el Catanazo
+// ============================================================
+const resetSelectionBtn = document.getElementById("resetSelection");
+if (resetSelectionBtn) {
+  resetSelectionBtn.addEventListener("click", () => {
+    if (selectedRuleIds.size === 0) return;
+    if (confirm("¿Vaciar todas las reglas de tu Catanazo?")) {
+      selectedRuleIds.clear();
+      refreshAll();
+    }
+  });
+}
+
+refreshAll();
 // ============================================================
 // MODAL - como instalar la app
 // ============================================================
