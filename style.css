@@ -261,7 +261,7 @@ html, body {
 }
 
 /* ============================================================
-   PARTIDA LIST (tab Catanazo) — checklist prolijo para leer en mesa
+   PARTIDA LIST (tab Catanazo) — contenido apilado + nav rapida
    ============================================================ */
 .partida-empty {
   text-align: center;
@@ -272,63 +272,57 @@ html, body {
 .partida-empty p { margin: 0 0 1.2rem; font-size: 1.02rem; }
 .partida-empty .btn-seal { display: inline-block; width: auto; padding: 0.7rem 1.6rem; }
 
-.partida-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: rgba(255,255,255,0.32);
-  border: 1px solid rgba(92,58,26,0.18);
-  border-left: 3px solid var(--gold);
-  border-radius: 8px;
-  padding: 0.65rem 0.8rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
+/* cada regla agregada se clona entera y se apila; sin controles de
+   edicion aca (compat-notice y rule-actions se sacan al clonar) */
+.partida-anchor {
+  scroll-margin-top: 90px;
+  padding-bottom: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 2px dashed rgba(92,58,26,0.2);
 }
-.partida-row-seal {
+.partida-anchor:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.partida-block { max-width: 100%; }
+.partida-block .page-hero { margin-bottom: 1.25rem; }
+
+/* navegacion rapida lateral: sellos rojos fijos a la derecha,
+   solo visibles dentro de la pestaña Catanazo con reglas cargadas */
+.jumpnav {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  position: fixed;
+  right: 10px;
+  top: 96px;
+  bottom: 84px;
+  z-index: 20;
+  overflow-y: auto;
+  padding: 4px 2px;
+  scrollbar-width: none;
+}
+.jumpnav::-webkit-scrollbar { display: none; }
+.jumpnav.is-visible { display: flex; }
+
+.jumpnav-seal {
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  border: 2px solid var(--parchment);
   background: radial-gradient(circle at 30% 30%, var(--wax), var(--wax-deep));
   color: var(--parchment);
   font-family: var(--font-display);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
-}
-.partida-row-title {
-  flex: 1;
-  min-width: 0;
-  font-family: var(--font-display);
-  font-size: 0.92rem;
-  color: var(--leather-deep);
-}
-.partida-row-impact {
-  flex-shrink: 0;
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  padding: 3px 9px;
-  border-radius: 20px;
-}
-.partida-row-impact--bajo { background: #dcead1; color: #35602a; }
-.partida-row-impact--medio { background: #f3e2c3; color: #8a5a1f; }
-.partida-row-impact--alto { background: #f0d4cd; color: #8a2f1f; }
-
-.partida-row-remove {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(92,58,26,0.1);
-  color: var(--ink-soft);
-  font-size: 0.85rem;
   cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  transition: transform 0.12s ease;
 }
-.partida-row-remove:hover { background: rgba(92,58,26,0.2); color: var(--ink); }
+.jumpnav-seal:hover { transform: scale(1.12); }
+.jumpnav-seal:active { transform: scale(0.94); }
 
 /* ============================================================
    RULE DETAIL — acciones (Jugar regla / Volver) + aviso de compatibilidad
@@ -474,7 +468,8 @@ html, body {
   font-family: var(--font-body);
   font-size: 0.92rem;
   line-height: 1.5;
-  color: var(--ink-soft);
+  color: var(--ink);
+  font-weight: 500;
   margin: 0 0 0.5rem;
 }
 .foot-link {
@@ -487,75 +482,62 @@ html, body {
 .foot-link:hover { text-decoration: underline; }
 
 /* ============================================================
-   MODAL — como instalar
+   SPLASH — pantalla de carga con el logo (3 segundos al abrir)
    ============================================================ */
-.modal-overlay {
-  display: none;
+.splash {
   position: fixed;
   inset: 0;
-  background: rgba(20, 12, 6, 0.6);
-  backdrop-filter: blur(2px);
-  z-index: 100;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  gap: 1.1rem;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,0.06), transparent 60%),
+    linear-gradient(180deg, var(--leather) 0%, var(--leather-deep) 100%);
+  transition: opacity 0.4s ease;
 }
-.modal-overlay.is-open { display: flex; }
+.splash.is-hidden { opacity: 0; pointer-events: none; }
 
-.modal-box {
-  position: relative;
-  background: linear-gradient(160deg, #fffdf7, var(--parchment-2));
-  border: 1px solid var(--gold);
-  border-radius: 12px;
-  max-width: 420px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 1.75rem;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-  animation: modalIn 0.2s ease;
+.splash-logo {
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  animation: splashPulse 1.6s ease-in-out infinite;
 }
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.85; }
 }
 
-.modal-close {
-  position: absolute;
-  top: 0.9rem;
-  right: 0.9rem;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(92,58,26,0.1);
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  cursor: pointer;
-  line-height: 1;
-}
-.modal-close:hover { background: rgba(92,58,26,0.2); color: var(--ink); }
-
-.modal-title {
+.splash-text {
   font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: var(--leather-deep);
-  margin: 0 0 1rem;
-  padding-right: 1.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(232, 220, 193, 0.7);
+  margin: 0;
 }
+
+/* ============================================================
+   INSTRUCCIONES DE INSTALACIÓN (texto en linea, sin popup)
+   ============================================================ */
+.install-steps { margin-top: 0.5rem; }
 
 .install-os {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--wax-deep);
-  margin: 1rem 0 0.4rem;
+  font-weight: 600;
+  margin: 1.1rem 0 0.4rem;
 }
-.install-os:first-of-type { margin-top: 0; }
-.modal-box ol {
+.install-os:first-child { margin-top: 0; }
+.install-steps ol {
   margin: 0;
-  padding-left: 1.15rem;
+  padding-left: 1.2rem;
 }
-.modal-box li {
-  font-size: 0.92rem;
+.install-steps li {
+  font-size: 0.96rem;
   line-height: 1.55;
   color: var(--ink);
   margin-bottom: 0.3rem;
@@ -565,14 +547,19 @@ html, body {
   background: rgba(92,58,26,0.1);
   border-radius: 4px;
   padding: 0 5px;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
 }
 .install-note {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-style: italic;
   color: var(--ink-soft);
-  margin: 1rem 0 0;
+  margin: 1.1rem 0 0;
   line-height: 1.5;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ============================================================
@@ -614,25 +601,6 @@ html, body {
   cursor: pointer;
 }
 .lightbox-close:hover { background: rgba(0,0,0,0.6); }
-
-.foot-msg {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  line-height: 1.4;
-  color: rgba(232, 220, 193, 0.65);
-  text-align: center;
-  margin: 0 0 0.5rem;
-}
-.foot-link {
-  display: block;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 0.68rem;
-  letter-spacing: 1px;
-  color: var(--gold-bright);
-  text-decoration: none;
-}
-.foot-link:hover { text-decoration: underline; }
 
 .sidebar-foot {
   padding-top: 0.7rem;

@@ -16,6 +16,11 @@
 </head>
 <body>
 
+<div class="splash" id="splash">
+  <img class="splash-logo" src="images/logo.svg" alt="World of Catan">
+  <p class="splash-text">Cargando reglas de la casa…</p>
+</div>
+
 <div class="app-shell">
 
   <header class="topbar">
@@ -43,10 +48,13 @@
       <header class="page-hero">
         <p class="page-eyebrow">Tu selección</p>
         <h2 class="page-title">Catanazo</h2>
-        <p class="page-lede">Las reglas que sumaste para esta partida, ordenadas de menor a mayor impacto. Tocá cualquiera para repasarla durante el juego.</p>
+        <p class="page-lede">Las reglas que sumaste para esta partida, de menor a mayor impacto. Usá los sellos de la derecha para saltar directo a cada una.</p>
       </header>
-      <div id="partidaList"><!-- generado por app.js --></div>
+      <div id="partidaList"><!-- generado por app.js: contenido completo de cada regla, apilado --></div>
     </section>
+
+    <!-- Navegación rápida lateral (solo visible en Catanazo, con reglas cargadas) -->
+    <nav class="jumpnav" id="jumpnav"><!-- generado por app.js --></nav>
 
     <!-- TAB: CONFIGURACIÓN -->
     <section class="page" id="tab-config">
@@ -59,8 +67,29 @@
         <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
           ⬇ Bajar PDF para imprimir
         </a>
-        <button class="install-btn" id="installOpen" type="button">¿Cómo instalo la app?</button>
         <button class="install-btn install-btn--danger" id="resetSelection" type="button">Vaciar Catanazo</button>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-h">¿Cómo instalo la app?</h3>
+
+        <div class="install-steps">
+          <p class="install-os"><strong>En iPhone (Safari)</strong></p>
+          <ol>
+            <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
+            <li>Elegí "Agregar a pantalla de inicio".</li>
+            <li>Confirmá el nombre y tocá "Agregar".</li>
+          </ol>
+
+          <p class="install-os"><strong>En Android (Chrome)</strong></p>
+          <ol>
+            <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
+            <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
+            <li>Confirmá tocando "Instalar".</li>
+          </ol>
+        </div>
+
+        <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
       </div>
 
       <div class="config-foot">
@@ -171,21 +200,21 @@
 
       <div class="deck-panel">
         <div class="deck-panel-top">
-          <span class="deck-count" id="deckCounter">Carta 0 de 30</span>
-          <button class="btn-reset" id="deckReset" title="Reiniciar mazo">↺ reiniciar mazo</button>
+          <span class="deck-count">Carta 0 de 30</span>
+          <button class="btn-reset" title="Reiniciar mazo">↺ reiniciar mazo</button>
         </div>
-        <div class="fate-card" id="fateCard">
+        <div class="fate-card">
           <div class="fate-card-inner">
             <p class="fate-card-eyebrow">Carta del reino</p>
-            <p class="fate-quote" id="fateQuote">Tocá el sello para tirar el 7.</p>
-            <div class="fate-effect" id="fateEffect" style="display:none;">
-              <span class="fate-tag" id="fateTag"></span>
-              <p class="fate-effect-text" id="fateEffectText"></p>
+            <p class="fate-quote">Tocá el sello para tirar el 7.</p>
+            <div class="fate-effect" style="display:none;">
+              <span class="fate-tag"></span>
+              <p class="fate-effect-text"></p>
             </div>
           </div>
         </div>
-        <button class="btn-seal" id="drawBtn">Tirar el 7</button>
-        <p class="deck-note" id="reshuffleNote">El mazo se agotó — se barajó de nuevo.</p>
+        <button class="btn-seal draw-btn">Tirar el 7</button>
+        <p class="deck-note">El mazo se agotó — se barajó de nuevo.</p>
       </div>
     </section>
 
@@ -222,11 +251,11 @@
 
       <div class="siege-top">
         <div class="knight-image">
-          <div class="knight-placeholder" id="knightPlaceholder">
+          <div class="knight-placeholder">
             <span class="icon">⚔</span>
             <span class="label">Carta de Caballero</span>
           </div>
-          <img id="knightPreview" src="images/knight.jpg" alt="Ejemplo de carta de Caballero">
+          <img class="knight-img" src="images/knight.jpg" alt="Ejemplo de carta de Caballero">
         </div>
 
         <div class="panel siege-rules">
@@ -348,46 +377,19 @@
   </main>
 
   <nav class="bottom-nav">
-    <button class="bottom-tab is-active" data-tab="tab-reglas">
+    <button class="bottom-tab is-active" data-tab="tab-reglas" aria-label="Reglas">
       <span class="bottom-icon">☰</span>
-      <span class="bottom-label">Reglas</span>
     </button>
-    <button class="bottom-tab" data-tab="tab-partida">
+    <button class="bottom-tab" data-tab="tab-partida" aria-label="Catanazo">
       <span class="bottom-icon-wrap">
         <span class="bottom-icon">⚔</span>
         <span class="cart-badge" id="cartBadge">0</span>
       </span>
-      <span class="bottom-label">Catanazo</span>
     </button>
-    <button class="bottom-tab" data-tab="tab-config">
+    <button class="bottom-tab" data-tab="tab-config" aria-label="Configuración">
       <span class="bottom-icon">⚙</span>
-      <span class="bottom-label">Configuración</span>
     </button>
   </nav>
-</div>
-
-<!-- ===== MODAL: COMO INSTALAR ===== -->
-<div class="modal-overlay" id="installModal">
-  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="installModalTitle">
-    <button class="modal-close" id="installClose" aria-label="Cerrar">✕</button>
-    <h3 id="installModalTitle" class="modal-title">¿Cómo instalo la app?</h3>
-
-    <p class="install-os"><strong>En iPhone (Safari)</strong></p>
-    <ol>
-      <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
-      <li>Elegí "Agregar a pantalla de inicio".</li>
-      <li>Confirmá el nombre y tocá "Agregar".</li>
-    </ol>
-
-    <p class="install-os"><strong>En Android (Chrome)</strong></p>
-    <ol>
-      <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
-      <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
-      <li>Confirmá tocando "Instalar".</li>
-    </ol>
-
-    <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
-  </div>
 </div>
 
 <!-- ===== LIGHTBOX: IMAGEN AMPLIADA ===== -->

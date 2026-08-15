@@ -1,7 +1,30 @@
 // ============================================================
-// ESTADO: reglas seleccionadas para "Catanazo" (en memoria, por sesión)
+// ESTADO: reglas seleccionadas para "Catanazo" (persiste en localStorage)
 // ============================================================
-const selectedRuleIds = new Set();
+const STORAGE_KEY = "catanazo-reglas";
+
+function loadSelection() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const ids = JSON.parse(raw);
+    if (!Array.isArray(ids)) return [];
+    // descarta ids que ya no existan en el catalogo (por si se elimino una regla)
+    return ids.filter(id => RULES.some(r => r.id === id));
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveSelection() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedRuleIds]));
+  } catch (e) {
+    // localStorage no disponible (modo privado, etc.) - la app sigue funcionando sin persistencia
+  }
+}
+
+const selectedRuleIds = new Set(loadSelection());
 const impactOrder = ["bajo", "medio", "alto"];
 const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };
 
@@ -19,11 +42,13 @@ function addRule(id) {
   const rule = getRule(id);
   if (!rule || isBlocked(rule)) return;
   selectedRuleIds.add(id);
+  saveSelection();
   refreshAll();
 }
 
 function removeRule(id) {
   selectedRuleIds.delete(id);
+  saveSelection();
   refreshAll();
 }
 
@@ -44,6 +69,7 @@ function goToTab(tabId) {
   showPage(tabId);
   bottomTabs.forEach(t => t.classList.toggle("is-active", t.dataset.tab === tabId));
   topbarTitle.textContent = tabTitles[tabId] || "Reglas";
+  updateJumpnavVisibility();
 }
 
 function goToRule(ruleId) {
@@ -52,6 +78,7 @@ function goToRule(ruleId) {
   showPage(ruleId);
   topbarTitle.textContent = rule.title;
   refreshRuleActions(ruleId);
+  updateJumpnavVisibility();
 }
 
 bottomTabs.forEach(tab => {
@@ -115,14 +142,48 @@ function renderReglasList() {
 }
 
 // ============================================================
-// RENDER: lista de Catanazo (tu partida) - checklist prolijo
+// RENDER: Catanazo (tu partida) - contenido completo apilado,
+// con navegacion rapida lateral. Sin boton de quitar (eso se
+// hace solo desde la pestaña Reglas).
 // ============================================================
 const partidaList = document.getElementById("partidaList");
+const jumpnav = document.getElementById("jumpnav");
+
+function buildRuleBlock(ruleId) {
+  const original = document.getElementById(ruleId);
+  if (!original) return null;
+
+  const clone = original.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.classList.remove("page", "is-active");
+  clone.classList.add("partida-block");
+
+  // en Catanazo no se gestiona compatibilidad ni se quita/juega: solo se lee
+  clone.querySelector(".compat-notice")?.remove();
+  clone.querySelector(".rule-actions")?.remove();
+
+  const wrap = document.createElement("div");
+  wrap.className = "partida-anchor";
+  wrap.id = `partida-anchor-${ruleId}`;
+  wrap.appendChild(clone);
+
+  // reconectar la interactividad de reglas con contenido dinamico,
+  // ya que clonar el DOM no copia los listeners originales
+  if (ruleId === "civilizaciones") wireCivImages(clone);
+  if (ruleId === "asedio") wireKnightImage(clone);
+  if (ruleId === "catastrofes") wireDisasterImages(clone);
+  if (ruleId === "consecuencias") initFateDeck(clone);
+
+  return wrap;
+}
 
 function renderPartidaList() {
   partidaList.innerHTML = "";
+  jumpnav.innerHTML = "";
 
-  if (selectedRuleIds.size === 0) {
+  const rulesSelected = RULES.filter(r => selectedRuleIds.has(r.id));
+
+  if (!rulesSelected.length) {
     partidaList.innerHTML = `
       <div class="partida-empty">
         <span class="icon">⚔</span>
@@ -131,45 +192,31 @@ function renderPartidaList() {
       </div>
     `;
     partidaList.querySelector("[data-goto-reglas]").addEventListener("click", () => goToTab("tab-reglas"));
+    updateJumpnavVisibility();
     return;
   }
 
-  impactOrder.forEach(level => {
-    const rulesInLevel = RULES.filter(r => r.impact === level && selectedRuleIds.has(r.id));
-    if (!rulesInLevel.length) return;
+  rulesSelected.forEach(rule => {
+    const block = buildRuleBlock(rule.id);
+    if (block) partidaList.appendChild(block);
 
-    const group = document.createElement("div");
-    group.className = "rule-group";
-    group.innerHTML = `<h3 class="rule-group-title rule-group-title--${level}">${impactLabels[level]}</h3>`;
-
-    rulesInLevel.forEach(rule => {
-      const row = document.createElement("div");
-      row.className = "partida-row";
-      row.dataset.open = rule.id;
-      row.innerHTML = `
-        <span class="partida-row-seal">${rule.seal}</span>
-        <span class="partida-row-title">${rule.title}</span>
-        <span class="partida-row-impact partida-row-impact--${level}">${level}</span>
-        <button class="partida-row-remove" data-remove="${rule.id}" title="Quitar">✕</button>
-      `;
-      group.appendChild(row);
+    const jumpBtn = document.createElement("button");
+    jumpBtn.className = "jumpnav-seal";
+    jumpBtn.dataset.jump = rule.id;
+    jumpBtn.title = rule.title;
+    jumpBtn.textContent = rule.seal;
+    jumpBtn.addEventListener("click", () => {
+      document.getElementById(`partida-anchor-${rule.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-
-    partidaList.appendChild(group);
+    jumpnav.appendChild(jumpBtn);
   });
 
-  partidaList.querySelectorAll("[data-open]").forEach(el => {
-    el.addEventListener("click", (ev) => {
-      if (ev.target.closest("[data-remove]")) return;
-      goToRule(el.dataset.open);
-    });
-  });
-  partidaList.querySelectorAll("[data-remove]").forEach(el => {
-    el.addEventListener("click", (ev) => {
-      ev.stopPropagation();
-      removeRule(el.dataset.remove);
-    });
-  });
+  updateJumpnavVisibility();
+}
+
+function updateJumpnavVisibility() {
+  const onPartidaTab = document.getElementById("tab-partida").classList.contains("is-active");
+  jumpnav.classList.toggle("is-visible", onPartidaTab && selectedRuleIds.size > 0);
 }
 
 // ============================================================
@@ -271,37 +318,11 @@ if (resetSelectionBtn) {
     if (selectedRuleIds.size === 0) return;
     if (confirm("¿Vaciar todas las reglas de tu Catanazo?")) {
       selectedRuleIds.clear();
+      saveSelection();
       refreshAll();
     }
   });
 }
-
-refreshAll();
-// ============================================================
-// MODAL - como instalar la app
-// ============================================================
-const installModal = document.getElementById("installModal");
-const installOpen = document.getElementById("installOpen");
-const installClose = document.getElementById("installClose");
-
-function openInstallModal() {
-  installModal.classList.add("is-open");
-}
-function closeInstallModal() {
-  installModal.classList.remove("is-open");
-}
-
-if (installOpen) installOpen.addEventListener("click", openInstallModal);
-if (installClose) installClose.addEventListener("click", closeInstallModal);
-if (installModal) {
-  installModal.addEventListener("click", (ev) => {
-    if (ev.target === installModal) closeInstallModal();
-  });
-}
-document.addEventListener("keydown", (ev) => {
-  if (ev.key === "Escape") closeInstallModal();
-});
-
 // ============================================================
 // CIVILIZACIONES - render con costos en iconos e imagen estatica
 // ============================================================
@@ -309,6 +330,23 @@ const civGrid = document.getElementById("civGrid");
 
 function renderCostRow(icons) {
   return icons.map(icon => `<span class="cost-icon">${icon}</span>`).join("");
+}
+
+// re-conecta el fallback de imagen (placeholder si /images/ no cargo)
+// dentro de cualquier raiz: el documento original o un clon de Catanazo
+function wireCivImages(root) {
+  root.querySelectorAll(".civ-image").forEach(civImg => {
+    const img = civImg.querySelector('[data-role="preview"]');
+    const placeholder = civImg.querySelector('[data-role="placeholder"]');
+    if (!img) return;
+    img.addEventListener("error", () => {
+      img.style.display = "none";
+      if (placeholder) placeholder.style.display = "flex";
+    });
+    img.addEventListener("load", () => {
+      if (placeholder) placeholder.style.display = "none";
+    });
+  });
 }
 
 CIVILIZATIONS.forEach(civ => {
@@ -345,61 +383,58 @@ CIVILIZATIONS.forEach(civ => {
       </div>
     </div>
   `;
-
-  // si la imagen todavia no fue subida a /images/civs/, se muestra el placeholder con el sello
-  const img = card.querySelector('[data-role="preview"]');
-  const placeholder = card.querySelector('[data-role="placeholder"]');
-  img.addEventListener("error", () => {
-    img.style.display = "none";
-    placeholder.style.display = "flex";
-  });
-  img.addEventListener("load", () => {
-    placeholder.style.display = "none";
-  });
-
   civGrid.appendChild(card);
 });
+
+wireCivImages(document);
 
 // ============================================================
 // ASEDIO - imagen de ejemplo de la carta de Caballero
 // ============================================================
-(function knightImage() {
-  const img = document.getElementById("knightPreview");
-  const placeholder = document.getElementById("knightPlaceholder");
+function wireKnightImage(root) {
+  const wrap = root.querySelector(".knight-image");
+  if (!wrap) return;
+  const img = wrap.querySelector(".knight-img");
+  const placeholder = wrap.querySelector(".knight-placeholder");
   if (!img) return;
   img.addEventListener("error", () => {
     img.style.display = "none";
-    placeholder.style.display = "flex";
+    if (placeholder) placeholder.style.display = "flex";
   });
   img.addEventListener("load", () => {
-    placeholder.style.display = "none";
+    if (placeholder) placeholder.style.display = "none";
   });
-})();
+}
+wireKnightImage(document);
 
 // ============================================================
 // CATASTROFES - imagenes de cada carta (con fallback a placeholder)
 // ============================================================
-document.querySelectorAll(".disaster-image").forEach(box => {
-  const img = box.querySelector("img");
-  const placeholder = box.querySelector(".disaster-placeholder");
-  if (!img) return;
-  let loaded = false;
-  img.addEventListener("error", () => {
-    loaded = false;
-    img.style.display = "none";
-    placeholder.style.display = "flex";
+function wireDisasterImages(root) {
+  root.querySelectorAll(".disaster-image").forEach(box => {
+    const img = box.querySelector("img");
+    const placeholder = box.querySelector(".disaster-placeholder");
+    if (!img) return;
+    let loaded = false;
+    img.addEventListener("error", () => {
+      loaded = false;
+      img.style.display = "none";
+      if (placeholder) placeholder.style.display = "flex";
+    });
+    img.addEventListener("load", () => {
+      loaded = true;
+      if (placeholder) placeholder.style.display = "none";
+    });
+    box.addEventListener("click", () => {
+      if (loaded) openLightbox(img.src, img.alt);
+    });
   });
-  img.addEventListener("load", () => {
-    loaded = true;
-    placeholder.style.display = "none";
-  });
-  box.addEventListener("click", () => {
-    if (loaded) openLightbox(img.src, img.alt);
-  });
-});
+}
+wireDisasterImages(document);
 
 // ============================================================
-// LIGHTBOX - amplia una imagen en un popup
+// LIGHTBOX - amplia una imagen en un popup (compartido globalmente,
+// tanto la seccion original como cualquier clon de Catanazo lo usan)
 // ============================================================
 const lightboxModal = document.getElementById("lightboxModal");
 const lightboxImg = document.getElementById("lightboxImg");
@@ -425,7 +460,9 @@ document.addEventListener("keydown", (ev) => {
 });
 
 // ============================================================
-// CONSECUENCIAS DEL 7 - mazo con contador y sin repeticion
+// CONSECUENCIAS DEL 7 - mazo con contador y sin repeticion.
+// Cada instancia (la original y cada clon en Catanazo) tiene su
+// propio mazo independiente, con su propio estado.
 // ============================================================
 const tagLabels = {
   good: "favorable",
@@ -443,53 +480,73 @@ function shuffle(arr) {
   return a;
 }
 
-let pile = shuffle(FATE_DECK.map((_, i) => i));
-let drawn = 0;
-const total = FATE_DECK.length;
+function initFateDeck(root) {
+  const drawBtn = root.querySelector(".draw-btn");
+  const deckCounter = root.querySelector(".deck-count");
+  const fateCard = root.querySelector(".fate-card");
+  const fateQuote = root.querySelector(".fate-quote");
+  const fateEffect = root.querySelector(".fate-effect");
+  const fateEffectText = root.querySelector(".fate-effect-text");
+  const fateTag = root.querySelector(".fate-tag");
+  const reshuffleNote = root.querySelector(".deck-note");
+  const deckReset = root.querySelector(".btn-reset");
+  if (!drawBtn) return;
 
-const drawBtn = document.getElementById("drawBtn");
-const deckCounter = document.getElementById("deckCounter");
-const fateCard = document.getElementById("fateCard");
-const fateQuote = document.getElementById("fateQuote");
-const fateEffect = document.getElementById("fateEffect");
-const fateEffectText = document.getElementById("fateEffectText");
-const fateTag = document.getElementById("fateTag");
-const reshuffleNote = document.getElementById("reshuffleNote");
-const deckReset = document.getElementById("deckReset");
+  const total = FATE_DECK.length;
+  let pile = shuffle(FATE_DECK.map((_, i) => i));
+  let drawn = 0;
 
-function resetDeck() {
-  pile = shuffle(FATE_DECK.map((_, i) => i));
-  drawn = 0;
-  deckCounter.textContent = `Carta 0 de ${total}`;
-  fateQuote.textContent = "Tocá el sello para tirar el 7.";
-  fateEffect.style.display = "none";
-  reshuffleNote.classList.remove("is-visible");
-}
-
-drawBtn.addEventListener("click", () => {
-  reshuffleNote.classList.remove("is-visible");
-
-  if (pile.length === 0) {
+  function resetDeck() {
     pile = shuffle(FATE_DECK.map((_, i) => i));
     drawn = 0;
-    reshuffleNote.classList.add("is-visible");
+    deckCounter.textContent = `Carta 0 de ${total}`;
+    fateQuote.textContent = "Tocá el sello para tirar el 7.";
+    fateEffect.style.display = "none";
+    reshuffleNote.classList.remove("is-visible");
   }
 
-  const idx = pile.pop();
-  const card = FATE_DECK[idx];
-  drawn++;
+  drawBtn.addEventListener("click", () => {
+    reshuffleNote.classList.remove("is-visible");
 
-  deckCounter.textContent = `Carta ${drawn} de ${total}`;
+    if (pile.length === 0) {
+      pile = shuffle(FATE_DECK.map((_, i) => i));
+      drawn = 0;
+      reshuffleNote.classList.add("is-visible");
+    }
 
-  fateCard.style.opacity = "0";
+    const idx = pile.pop();
+    const card = FATE_DECK[idx];
+    drawn++;
+
+    deckCounter.textContent = `Carta ${drawn} de ${total}`;
+
+    fateCard.style.opacity = "0";
+    setTimeout(() => {
+      fateQuote.textContent = card.q;
+      fateEffectText.textContent = card.e;
+      fateTag.className = `fate-tag ${card.w}`;
+      fateTag.textContent = tagLabels[card.w];
+      fateEffect.style.display = "block";
+      fateCard.style.opacity = "1";
+    }, 150);
+  });
+
+  deckReset.addEventListener("click", resetDeck);
+}
+initFateDeck(document);
+
+// ============================================================
+// SPLASH - pantalla de carga con el logo (3 segundos)
+// ============================================================
+const splash = document.getElementById("splash");
+if (splash) {
   setTimeout(() => {
-    fateQuote.textContent = card.q;
-    fateEffectText.textContent = card.e;
-    fateTag.className = `fate-tag ${card.w}`;
-    fateTag.textContent = tagLabels[card.w];
-    fateEffect.style.display = "block";
-    fateCard.style.opacity = "1";
-  }, 150);
-});
+    splash.classList.add("is-hidden");
+    setTimeout(() => splash.remove(), 400);
+  }, 3000);
+}
 
-deckReset.addEventListener("click", resetDeck);
+// ============================================================
+// primer render de toda la app, ya con todo inicializado
+// ============================================================
+refreshAll();
