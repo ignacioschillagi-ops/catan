@@ -323,7 +323,8 @@ html, body {
   color: var(--parchment);
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-  transition: transform 0.12s ease;
+  opacity: 0.48;
+  transition: transform 0.12s ease, opacity 0.25s ease;
 }
 .jumpnav-seal svg {
   width: 60%;
@@ -332,6 +333,11 @@ html, body {
 }
 .jumpnav-seal:hover { transform: scale(1.12); }
 .jumpnav-seal:active { transform: scale(0.94); }
+.jumpnav-seal.is-current {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(215, 169, 79, 0.5), 0 2px 8px rgba(0,0,0,0.4);
+}
 
 /* ============================================================
    RULE DETAIL — acciones (Jugar regla / Volver) + aviso de compatibilidad

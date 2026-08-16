@@ -38,6 +38,13 @@ function isBlocked(rule) {
   return rule.incompatible.some(id => selectedRuleIds.has(id));
 }
 
+// nombres de las reglas ya elegidas que estan causando el bloqueo, para mostrar el motivo
+function blockingRuleNames(rule) {
+  return rule.incompatible
+    .filter(id => selectedRuleIds.has(id))
+    .map(id => getRule(id).title);
+}
+
 function addRule(id) {
   const rule = getRule(id);
   if (!rule || isBlocked(rule)) return;
@@ -112,7 +119,7 @@ function renderReglasList() {
           <span class="rule-row-text">
             <h4>${rule.title}</h4>
             <p>${rule.desc}</p>
-            ${blocked ? `<span class="rule-row-note">No compatible</span>` : ""}
+            ${blocked ? `<span class="rule-row-note">No compatible con ${blockingRuleNames(rule).join(", ")}</span>` : ""}
           </span>
         </button>
         <button class="rule-row-add${added ? " is-added" : ""}" data-add="${rule.id}" ${blocked ? "disabled" : ""}>
@@ -193,6 +200,7 @@ function renderPartidaList() {
     `;
     partidaList.querySelector("[data-goto-reglas]").addEventListener("click", () => goToTab("tab-reglas"));
     updateJumpnavVisibility();
+    setupJumpnavObserver();
     return;
   }
 
@@ -212,6 +220,33 @@ function renderPartidaList() {
   });
 
   updateJumpnavVisibility();
+  setupJumpnavObserver();
+}
+
+// resalta en el jumpnav el sello de la regla que esta a la vista mientras
+// se scrollea el Catanazo, para dar sensacion de "donde estoy parado"
+let jumpnavObserver = null;
+
+function setupJumpnavObserver() {
+  if (jumpnavObserver) jumpnavObserver.disconnect();
+  if (typeof IntersectionObserver === "undefined") return; // navegadores muy viejos: se omite, sin romper nada
+
+  const anchors = partidaList.querySelectorAll(".partida-anchor");
+  if (!anchors.length) return;
+
+  jumpnavObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const ruleId = entry.target.id.replace("partida-anchor-", "");
+      const seal = jumpnav.querySelector(`[data-jump="${ruleId}"]`);
+      if (seal) seal.classList.toggle("is-current", entry.isIntersecting);
+    });
+  }, {
+    root: null,
+    rootMargin: "-110px 0px -65% 0px",
+    threshold: 0
+  });
+
+  anchors.forEach(a => jumpnavObserver.observe(a));
 }
 
 function updateJumpnavVisibility() {
@@ -277,12 +312,14 @@ function refreshRuleActions(ruleId) {
   // aviso de compatibilidad
   const notice = section.querySelector(".compat-notice");
   if (notice) {
-    const names = rule.incompatible.map(id => getRule(id).title).join(", ");
-    const conflict = rule.incompatible.some(id => selectedRuleIds.has(id));
+    const names = rule.incompatible.map(id => getRule(id).title);
+    const namesList = names.join(" y ");
+    const conflictNames = blockingRuleNames(rule);
+    const conflict = conflictNames.length > 0;
     notice.classList.toggle("is-conflict", conflict);
     notice.innerHTML = `
       <span class="compat-notice-tag">${conflict ? "Conflicto" : "Incompatible"}</span>
-      <p>Esta regla no es compatible con <strong>${names}</strong>. Se juega una de las dos, no ambas en la misma partida.${conflict ? " Ya tenés esa regla en tu Catanazo — quitala primero si querés sumar esta." : ""}</p>
+      <p>Esta regla no es compatible con <strong>${namesList}</strong>. Se juegan por separado, no en la misma partida.${conflict ? ` Ya tenés <strong>${conflictNames.join(", ")}</strong> en tu Catanazo — quitala primero si querés sumar esta.` : ""}</p>
     `;
   }
 
@@ -293,7 +330,7 @@ function refreshRuleActions(ruleId) {
 
   playBtn.classList.toggle("is-added", added);
   playBtn.disabled = blocked;
-  playBtn.textContent = added ? "✕ Quitar regla" : (blocked ? "No compatible con tu Catanazo" : "+ Jugar regla");
+  playBtn.textContent = added ? "✕ Quitar regla" : (blocked ? `No compatible con ${blockingRuleNames(rule).join(", ")}` : "+ Jugar regla");
 }
 
 // ============================================================
