@@ -204,7 +204,7 @@ function renderPartidaList() {
     jumpBtn.className = "jumpnav-seal";
     jumpBtn.dataset.jump = rule.id;
     jumpBtn.title = rule.title;
-    jumpBtn.textContent = rule.seal;
+    jumpBtn.innerHTML = rule.seal;
     jumpBtn.addEventListener("click", () => {
       document.getElementById(`partida-anchor-${rule.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
