@@ -1,6 +1,30 @@
 // ============================================================
+// SETS DE RECURSOS - Catan Clásico vs Age of Catan by Joe
+// El toggle en Configuración cambia cuál de estos se usa para
+// mostrar nombres e íconos en Civilizaciones y Asedio.
+// ============================================================
+const RESOURCE_SETS = {
+  clasico: {
+    madera: { name: "madera", icon: "🪵" },
+    oveja: { name: "oveja", icon: "🐑" },
+    trigo: { name: "trigo", icon: "🌾" },
+    piedra: { name: "piedra", icon: "🪨" },
+    arcilla: { name: "arcilla", icon: "🧱" }
+  },
+  joe: {
+    madera: { name: "árbol", icon: "🌳" },
+    oveja: { name: "oveja", icon: "🦙" },
+    trigo: { name: "paja", icon: "🌾" },
+    piedra: { name: "piedra", icon: "🪨" },
+    arcilla: { name: "oro", icon: "🪙" }
+  }
+};
+
+// ============================================================
 // CIVILIZACIONES
-// Los costos usan iconos de recursos: madera, oveja, mineral, trigo, arcilla
+// Los costos usan claves de recurso (madera, oveja, trigo, piedra,
+// arcilla) en vez de íconos fijos, para poder mostrar Catan Clásico
+// o Age of Catan by Joe segun lo que elija el usuario en Configuración.
 // "image" apunta a la carpeta /images/ - reemplaza esos archivos en GitHub
 // (mismo nombre, cualquier imagen) y se sincronizan solas en Vercel.
 // ============================================================
@@ -12,10 +36,10 @@ const CIVILIZATIONS = [
     color: "var(--incas)",
     image: "images/incas.jpg",
     costs: {
-      camino: ["🐑", "🧱"],
-      poblado: ["🐑", "🧱", "🪵", "🌾"],
-      ciudad: ["🐑", "🪨", "🪨", "🌾", "🌾"],
-      cdd: ["🐑", "🪨", "🪵"]
+      camino: ["oveja", "arcilla"],
+      poblado: ["oveja", "arcilla", "madera", "trigo"],
+      ciudad: ["oveja", "piedra", "piedra", "trigo", "trigo"],
+      cdd: ["oveja", "piedra", "madera"]
     },
     passive: "Si ningún número tuyo produce en un turno, recibís del banco 1 recurso a elección de quien tiró los dados.",
     active: "Robás con el ladrón, y podés reposicionar 1 camino propio (abierto) en otra ubicación válida."
@@ -27,12 +51,12 @@ const CIVILIZATIONS = [
     color: "var(--azteca)",
     image: "images/azteca.jpg",
     costs: {
-      camino: ["🐑", "🧱"],
-      poblado: ["🐑", "🧱", "🪵", "🌾"],
-      ciudad: ["🐑", "🪨", "🪨", "🌾", "🌾"],
-      cdd: ["🐑", "🪨", "🪵"]
+      camino: ["oveja", "arcilla"],
+      poblado: ["oveja", "arcilla", "madera", "trigo"],
+      ciudad: ["oveja", "piedra", "piedra", "trigo", "trigo"],
+      cdd: ["oveja", "piedra", "madera"]
     },
-    passive: "Al construir una ciudad nueva, podés sacrificar 1 CDD sin revelar, y recibir a cambio otra CDD.",
+    passive: "Al construir un asentamiento nuevo, podés sacrificar 1 CDD sin revelar, y recibir a cambio otra CDD nueva.",
     active: "Si el ladrón cae en un hexágono con poblados de dos jugadores, robás 1 carta a cada uno."
   },
   {
@@ -42,13 +66,13 @@ const CIVILIZATIONS = [
     color: "var(--romanos)",
     image: "images/romanos.jpg",
     costs: {
-      camino: ["🪵", "🪨"],
-      poblado: ["🪵", "🪨", "🌾", "🐑"],
-      ciudad: ["🪵", "🧱", "🧱", "🐑", "🐑"],
-      cdd: ["🪵", "🧱", "🌾"]
+      camino: ["madera", "piedra"],
+      poblado: ["madera", "piedra", "trigo", "oveja"],
+      ciudad: ["madera", "arcilla", "arcilla", "oveja", "oveja"],
+      cdd: ["madera", "arcilla", "trigo"]
     },
     passive: "Al comprar una CDD, podés mirar la carta superior del mazo. Si no te sirve, tomás la siguiente y barajás.",
-    active: "Mirás la mano de un jugador y elegís qué carta robarle."
+    active: "Al mover el ladrón, le mirás la mano a un jugador y elegís qué carta robarle."
   },
   {
     id: "vikingos",
@@ -57,12 +81,12 @@ const CIVILIZATIONS = [
     color: "var(--vikingos)",
     image: "images/vikingos.jpg",
     costs: {
-      camino: ["🪵", "🪨"],
-      poblado: ["🪵", "🪨", "🌾", "🐑"],
-      ciudad: ["🪵", "🧱", "🧱", "🐑", "🐑"],
-      cdd: ["🪵", "🧱", "🌾"]
+      camino: ["madera", "piedra"],
+      poblado: ["madera", "piedra", "trigo", "oveja"],
+      ciudad: ["madera", "arcilla", "arcilla", "oveja", "oveja"],
+      cdd: ["madera", "arcilla", "trigo"]
     },
-    passive: "Con 2+ puertos 3:1, comerciás a 2:1 en cualquiera. Tus ciudades solo se construyen en costa.",
+    passive: "Con al menos 2 puertos 3:1, comerciás a 2:1 en cualquiera. Tus 2 primeras ciudades solo se construyen en puertos.",
     active: "Robás normal. Además, un poblado o ciudad te cuesta 1 recurso menos ese turno."
   },
   {
@@ -72,10 +96,10 @@ const CIVILIZATIONS = [
     color: "var(--egipcios)",
     image: "images/egipcios.jpg",
     costs: {
-      camino: ["🌾", "🧱"],
-      poblado: ["🌾", "🧱", "🐑", "🪵"],
-      ciudad: ["🌾", "🪨", "🪨", "🪵", "🪵"],
-      cdd: ["🌾", "🪨", "🐑"]
+      camino: ["trigo", "arcilla"],
+      poblado: ["trigo", "arcilla", "oveja", "madera"],
+      ciudad: ["trigo", "piedra", "piedra", "madera", "madera"],
+      cdd: ["trigo", "piedra", "oveja"]
     },
     passive: "Tus poblados junto a desierto producen +2 recursos.",
     active: "Robás con el ladrón, o le das 1 recurso al jugador con menos puntos, a cambio recibís 1 CDD del banco."
@@ -87,13 +111,13 @@ const CIVILIZATIONS = [
     color: "var(--chinos)",
     image: "images/chinos.jpg",
     costs: {
-      camino: ["🌾", "🧱"],
-      poblado: ["🌾", "🧱", "🐑", "🪵"],
-      ciudad: ["🌾", "🪨", "🪨", "🪵", "🪵"],
-      cdd: ["🌾", "🪨", "🐑"]
+      camino: ["trigo", "arcilla"],
+      poblado: ["trigo", "arcilla", "oveja", "madera"],
+      ciudad: ["trigo", "piedra", "piedra", "madera", "madera"],
+      cdd: ["trigo", "piedra", "oveja"]
     },
     passive: "Tu límite de cartas en mano si toca un 7, es de 9 cartas.",
-    active: "En vez de robar con el ladrón, comerciás 2:2 con el banco (una vez por turno)."
+    active: "Robás con el ladrón, o comerciás 2:2 con el banco."
   }
 ];
 

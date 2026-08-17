@@ -62,6 +62,16 @@
         <h2 class="page-title">Configuración</h2>
       </header>
 
+      <div class="panel">
+        <h3 class="panel-h">Versión del juego</h3>
+        <p class="panel-note">Cambia los nombres e íconos de recursos que aparecen en Civilizaciones y Asedio, para que coincidan con tu edición física.</p>
+        <button class="ruleset-toggle" id="rulesetToggle" type="button">
+          <span class="ruleset-option" data-option="clasico">Catan Clásico</span>
+          <span class="ruleset-option" data-option="joe">Age of Catan by Joe</span>
+          <span class="ruleset-thumb"></span>
+        </button>
+      </div>
+
       <div class="panel config-panel">
         <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
           ⬇ Bajar PDF para imprimir
@@ -236,7 +246,7 @@
         </div>
       </div>
       <p class="panel-note">Cada jugador lanza un dado para saber qué civilización utilizará. Si el número ya salió, se vuelve a lanzar.</p>
-      <p class="panel-note panel-note--icons">🪵 madera &nbsp;·&nbsp; 🐑 oveja &nbsp;·&nbsp; 🪨 mineral &nbsp;·&nbsp; 🌾 trigo &nbsp;·&nbsp; 🧱 arcilla</p>
+      <p class="panel-note panel-note--icons resource-legend"><!-- generado por app.js segun el ruleset activo --></p>
 
       <div class="civ-grid" id="civGrid"><!-- civ cards injected by JS --></div>
     </section>
@@ -277,8 +287,8 @@
           </thead>
           <tbody>
             <tr><td>Camino</td><td>1 Caballero ⚔️ + 2 recursos 🚥</td><td>1 Caballero ⚔️</td></tr>
-            <tr><td>Poblado</td><td>1 Caballero ⚔️ + 4 recursos 🛖</td><td>1 Caballero ⚔️ + 1 Arcilla 🧱</td></tr>
-            <tr><td>Ciudad</td><td>1 Caballero ⚔️ + 5 recursos 🏯</td><td>1 Caballero ⚔️ + 2 Piedras 🪨🪨</td></tr>
+            <tr><td>Poblado</td><td>1 Caballero ⚔️ + 4 recursos 🛖</td><td>1 Caballero ⚔️ + 1 <span class="res-label" data-res-key="arcilla" data-res-count="1">Arcilla 🧱</span></td></tr>
+            <tr><td>Ciudad</td><td>1 Caballero ⚔️ + 5 recursos 🏯</td><td>1 Caballero ⚔️ + 2 <span class="res-label" data-res-key="piedra" data-res-count="2">Piedras 🪨🪨</span></td></tr>
           </tbody>
         </table>
       </div>

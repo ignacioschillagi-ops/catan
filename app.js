@@ -1,4 +1,28 @@
 // ============================================================
+// ESTADO: set de recursos activo (Catan Clásico vs Age of Catan by Joe)
+// ============================================================
+const RULESET_STORAGE_KEY = "catanazo-ruleset";
+
+function loadRuleset() {
+  try {
+    const saved = localStorage.getItem(RULESET_STORAGE_KEY);
+    return saved === "joe" ? "joe" : "clasico";
+  } catch (e) {
+    return "clasico";
+  }
+}
+
+function saveRuleset() {
+  try {
+    localStorage.setItem(RULESET_STORAGE_KEY, currentRuleset);
+  } catch (e) {
+    // sin localStorage disponible, la app sigue funcionando sin persistencia
+  }
+}
+
+let currentRuleset = loadRuleset();
+
+// ============================================================
 // ESTADO: reglas seleccionadas para "Catanazo" (persiste en localStorage)
 // ============================================================
 const STORAGE_KEY = "catanazo-reglas";
@@ -184,6 +208,7 @@ function buildRuleBlock(ruleId) {
   if (ruleId === "asedio") wireKnightImage(clone);
   if (ruleId === "catastrofes") wireDisasterImages(clone);
   if (ruleId === "consecuencias") initFateDeck(clone);
+  if (ruleId === "civilizaciones" || ruleId === "asedio") refreshResourceDisplay();
 
   return wrap;
 }
@@ -366,6 +391,28 @@ if (resetSelectionBtn) {
     }
   });
 }
+
+// ============================================================
+// TOGGLE: Catan Clásico vs Age of Catan by Joe (set de recursos)
+// ============================================================
+const rulesetToggle = document.getElementById("rulesetToggle");
+function applyRulesetUI() {
+  if (!rulesetToggle) return;
+  rulesetToggle.dataset.active = currentRuleset;
+  rulesetToggle.querySelectorAll(".ruleset-option").forEach(opt => {
+    opt.classList.toggle("is-active", opt.dataset.option === currentRuleset);
+  });
+}
+if (rulesetToggle) {
+  applyRulesetUI();
+  rulesetToggle.addEventListener("click", () => {
+    currentRuleset = currentRuleset === "clasico" ? "joe" : "clasico";
+    saveRuleset();
+    applyRulesetUI();
+    refreshResourceDisplay();
+  });
+}
+
 // ============================================================
 // CIVILIZACIONES - render con costos en iconos e imagen estatica
 // ============================================================
@@ -374,8 +421,11 @@ const civGrid = document.getElementById("civGrid");
 const STAR_OUTLINE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245"/></svg>';
 const STAR_FILLED_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/></svg>';
 
-function renderCostRow(icons) {
-  return icons.map(icon => `<span class="cost-icon">${icon}</span>`).join("");
+function renderCostRow(resourceKeys) {
+  return resourceKeys.map(key => {
+    const res = RESOURCE_SETS[currentRuleset][key];
+    return `<span class="cost-icon" title="${res.name}">${res.icon}</span>`;
+  }).join("");
 }
 
 // re-conecta el fallback de imagen (placeholder si /images/ no cargo)
@@ -505,6 +555,48 @@ CIVILIZATIONS.forEach(civ => {
 wireCivImages(document);
 wireCivFavorites(document);
 refreshCivFavoritesUI();
+
+// ============================================================
+// SET DE RECURSOS - vuelve a pintar costos de Civilizaciones y la
+// tabla de Asedio segun el ruleset activo (Catan Clásico / Age of
+// Catan by Joe). Corre sobre TODO el documento: la seccion original
+// y cualquier clon que este mostrandose en Catanazo al mismo tiempo.
+// ============================================================
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function refreshResourceDisplay() {
+  const costOrder = ["camino", "poblado", "ciudad", "cdd"];
+  document.querySelectorAll(".civ-card").forEach(card => {
+    const civ = CIVILIZATIONS.find(c => c.id === card.dataset.civId);
+    if (!civ) return;
+    const vals = card.querySelectorAll(".civ-cost-val");
+    vals.forEach((el, i) => {
+      el.innerHTML = renderCostRow(civ.costs[costOrder[i]]);
+    });
+  });
+
+  document.querySelectorAll(".res-label").forEach(el => {
+    const key = el.dataset.resKey;
+    const count = parseInt(el.dataset.resCount, 10) || 1;
+    const res = RESOURCE_SETS[currentRuleset][key];
+    if (!res) return;
+    const label = count > 1 ? `${capitalize(res.name)}s` : capitalize(res.name);
+    el.textContent = `${label} ${res.icon.repeat(count)}`;
+  });
+
+  const legendOrder = ["madera", "oveja", "piedra", "trigo", "arcilla"];
+  const legendText = legendOrder.map(key => {
+    const res = RESOURCE_SETS[currentRuleset][key];
+    return `${res.icon} ${res.name}`;
+  }).join(" &nbsp;·&nbsp; ");
+  document.querySelectorAll(".resource-legend").forEach(el => {
+    el.innerHTML = legendText;
+  });
+}
+
+refreshResourceDisplay();
 
 // ============================================================
 // ASEDIO - imagen de ejemplo de la carta de Caballero
