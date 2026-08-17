@@ -176,7 +176,11 @@ function buildRuleBlock(ruleId) {
 
   // reconectar la interactividad de reglas con contenido dinamico,
   // ya que clonar el DOM no copia los listeners originales
-  if (ruleId === "civilizaciones") wireCivImages(clone);
+  if (ruleId === "civilizaciones") {
+    wireCivImages(clone);
+    wireCivFavorites(clone);
+    refreshCivFavoritesUI();
+  }
   if (ruleId === "asedio") wireKnightImage(clone);
   if (ruleId === "catastrofes") wireDisasterImages(clone);
   if (ruleId === "consecuencias") initFateDeck(clone);
@@ -189,6 +193,8 @@ function renderPartidaList() {
   jumpnav.innerHTML = "";
 
   const rulesSelected = RULES.filter(r => selectedRuleIds.has(r.id));
+  const partidaDivider = document.getElementById("partidaDivider");
+  if (partidaDivider) partidaDivider.classList.toggle("is-visible", rulesSelected.length > 0);
 
   if (!rulesSelected.length) {
     partidaList.innerHTML = `
@@ -365,6 +371,9 @@ if (resetSelectionBtn) {
 // ============================================================
 const civGrid = document.getElementById("civGrid");
 
+const STAR_OUTLINE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245"/></svg>';
+const STAR_FILLED_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/></svg>';
+
 function renderCostRow(icons) {
   return icons.map(icon => `<span class="cost-icon">${icon}</span>`).join("");
 }
@@ -386,10 +395,79 @@ function wireCivImages(root) {
   });
 }
 
+// ============================================================
+// CIVILIZACIONES - favoritas: marcar cuales usa cada jugador para
+// compactar el resto y acortar el scroll en Catanazo. Se puede
+// tener mas de una activa (celular compartido / banquero).
+// ============================================================
+const CIV_STORAGE_KEY = "catanazo-civ-favoritas";
+
+function loadCivFavorites() {
+  try {
+    const raw = localStorage.getItem(CIV_STORAGE_KEY);
+    if (!raw) return [];
+    const ids = JSON.parse(raw);
+    return Array.isArray(ids) ? ids.filter(id => CIVILIZATIONS.some(c => c.id === id)) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCivFavorites() {
+  try {
+    localStorage.setItem(CIV_STORAGE_KEY, JSON.stringify([...civFavorites]));
+  } catch (e) {
+    // sin localStorage disponible, la app sigue funcionando sin persistencia
+  }
+}
+
+const civFavorites = new Set(loadCivFavorites());
+
+function toggleCivFavorite(civId) {
+  if (civFavorites.has(civId)) {
+    civFavorites.delete(civId);
+  } else {
+    civFavorites.add(civId);
+  }
+  saveCivFavorites();
+  refreshCivFavoritesUI();
+}
+
+// aplica el estado (estrella + compactado) a TODAS las tarjetas de esa
+// civilizacion presentes en el documento (la original y cualquier clon
+// que este mostrandose en Catanazo al mismo tiempo)
+function refreshCivFavoritesUI() {
+  const anyFav = civFavorites.size > 0;
+  document.querySelectorAll(".civ-card").forEach(card => {
+    const civId = card.dataset.civId;
+    const isFav = civFavorites.has(civId);
+    card.classList.toggle("is-compact", anyFav && !isFav);
+    const btn = card.querySelector(".civ-fav-btn");
+    if (btn) {
+      btn.classList.toggle("is-active", isFav);
+      btn.innerHTML = isFav ? STAR_FILLED_SVG : STAR_OUTLINE_SVG;
+      btn.setAttribute("aria-label", isFav ? `Quitar ${card.dataset.civName} de favoritas` : `Marcar ${card.dataset.civName} como favorita`);
+    }
+  });
+}
+
+// re-conecta el click de la estrella dentro de cualquier raiz (documento
+// original o clon de Catanazo); el estado en si es compartido y global
+function wireCivFavorites(root) {
+  root.querySelectorAll(".civ-fav-btn").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      toggleCivFavorite(btn.dataset.civFav);
+    });
+  });
+}
+
 CIVILIZATIONS.forEach(civ => {
   const card = document.createElement("article");
   card.className = "civ-card";
   card.style.setProperty("--civ-color", civ.color);
+  card.dataset.civId = civ.id;
+  card.dataset.civName = civ.name;
 
   card.innerHTML = `
     <div class="civ-image">
@@ -401,6 +479,7 @@ CIVILIZATIONS.forEach(civ => {
     </div>
     <div class="civ-body">
       <div class="civ-head">
+        <button class="civ-fav-btn" data-civ-fav="${civ.id}" title="Favorita" aria-label="Marcar ${civ.name} como favorita">${STAR_OUTLINE_SVG}</button>
         <h3 class="civ-name">${civ.name}</h3>
         <span class="civ-number">N.&deg; ${civ.number}</span>
       </div>
@@ -424,6 +503,8 @@ CIVILIZATIONS.forEach(civ => {
 });
 
 wireCivImages(document);
+wireCivFavorites(document);
+refreshCivFavoritesUI();
 
 // ============================================================
 // ASEDIO - imagen de ejemplo de la carta de Caballero

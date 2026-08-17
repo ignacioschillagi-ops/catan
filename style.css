@@ -669,6 +669,32 @@ html, body {
 
 .page-hero { margin-bottom: 2.25rem; }
 .page-hero--sm { margin-bottom: 1.75rem; }
+.page-hero--partida { margin-bottom: 1.25rem; }
+.page-hero--partida .page-lede { max-width: none; }
+
+.partida-divider {
+  display: none;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+.partida-divider.is-visible { display: flex; }
+.partida-divider::before,
+.partida-divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.6;
+}
+.partida-divider span {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--wax-deep);
+}
 
 .page-eyebrow {
   font-family: var(--font-display);
@@ -910,6 +936,7 @@ html, body {
   border: 3px solid var(--civ-color, var(--gold));
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .civ-image {
@@ -937,14 +964,42 @@ html, body {
 .civ-image-placeholder .icon { font-size: 1.6rem; display: block; margin-bottom: 0.3rem; }
 .civ-image-placeholder span.label { font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; }
 
+/* boton de favorita: flota sobre la imagen (arriba a la izquierda) en modo
+   expandido; en modo compacto se acomoda solo, en linea junto al nombre */
+.civ-fav-btn {
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(20, 12, 6, 0.45);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.civ-fav-btn svg { width: 60%; height: 60%; }
+.civ-fav-btn:hover { transform: scale(1.1); }
+.civ-fav-btn.is-active { background: var(--wax); color: #fff; }
+.civ-card:not(.is-compact) .civ-fav-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
 .civ-body { padding: 1.1rem 1.3rem 1.4rem; }
 .civ-head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
   margin-bottom: 0.6rem;
 }
 .civ-name {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-display);
   font-size: 1.25rem;
   color: var(--civ-color, var(--leather-deep));
@@ -952,11 +1007,33 @@ html, body {
   letter-spacing: 0.5px;
 }
 .civ-number {
+  flex-shrink: 0;
   font-family: var(--font-display);
   font-size: 0.7rem;
   color: var(--ink-soft);
   opacity: 0.6;
 }
+
+/* estado compacto: solo el nombre + estrella, se activa cuando hay al
+   menos una civ marcada como favorita y esta no lo es */
+.civ-card.is-compact {
+  border-width: 2px;
+}
+.civ-card.is-compact .civ-image,
+.civ-card.is-compact .civ-costs,
+.civ-card.is-compact .civ-ability {
+  display: none;
+}
+.civ-card.is-compact .civ-body { padding: 0.55rem 0.9rem; }
+.civ-card.is-compact .civ-head { margin-bottom: 0; }
+.civ-card.is-compact .civ-name { font-size: 1.02rem; }
+.civ-card.is-compact .civ-fav-btn {
+  width: 26px;
+  height: 26px;
+  background: rgba(92,58,26,0.12);
+  color: var(--ink-soft);
+}
+.civ-card.is-compact .civ-fav-btn.is-active { background: var(--wax); color: #fff; }
 
 .civ-costs {
   display: flex;
