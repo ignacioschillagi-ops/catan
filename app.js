@@ -1,4 +1,52 @@
 // ============================================================
+// ESTADO: idioma activo (es / en)
+// ============================================================
+const LANG_STORAGE_KEY = "catanazo-lang";
+
+function loadLang() {
+  try {
+    const saved = localStorage.getItem(LANG_STORAGE_KEY);
+    return saved === "en" ? "en" : "es";
+  } catch (e) {
+    return "es";
+  }
+}
+function saveLang() {
+  try {
+    localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+  } catch (e) {
+    // sin localStorage disponible, la app sigue funcionando sin persistencia
+  }
+}
+let currentLang = loadLang();
+
+// helper de traduccion: I18N[currentLang][key], con reemplazo simple de {vars}
+function t(key, vars) {
+  const dict = I18N[currentLang] || I18N.es;
+  let text = dict[key] !== undefined ? dict[key] : key;
+  if (vars) {
+    Object.keys(vars).forEach(k => {
+      text = text.replace(`{${k}}`, vars[k]);
+    });
+  }
+  return text;
+}
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// accesores de contenido bilingue de los datos (RULES / CIVILIZATIONS / FATE_DECK)
+function ruleTitle(rule) { return currentLang === "en" ? rule.titleEn : rule.title; }
+function ruleDesc(rule) { return currentLang === "en" ? rule.descEn : rule.desc; }
+function civName(civ) { return currentLang === "en" ? civ.nameEn : civ.name; }
+function civPassive(civ) { return currentLang === "en" ? civ.passiveEn : civ.passive; }
+function civActive(civ) { return currentLang === "en" ? civ.activeEn : civ.active; }
+function cardQuote(card) { return currentLang === "en" ? card.qEn : card.q; }
+function cardEffect(card) { return currentLang === "en" ? card.eEn : card.e; }
+function resName(res) { return currentLang === "en" ? res.nameEn : res.name; }
+
+// ============================================================
 // ESTADO: set de recursos activo (Catan Clásico vs Age of Catan by Joe)
 // ============================================================
 const RULESET_STORAGE_KEY = "catanazo-ruleset";
@@ -50,7 +98,7 @@ function saveSelection() {
 
 const selectedRuleIds = new Set(loadSelection());
 const impactOrder = ["bajo", "medio", "alto"];
-const impactLabels = { bajo: "Impacto bajo", medio: "Impacto medio", alto: "Impacto alto" };
+const impactKeys = { bajo: "impactoBajo", medio: "impactoMedio", alto: "impactoAlto" };
 
 function getRule(id) {
   return RULES.find(r => r.id === id);
@@ -66,7 +114,7 @@ function isBlocked(rule) {
 function blockingRuleNames(rule) {
   return rule.incompatible
     .filter(id => selectedRuleIds.has(id))
-    .map(id => getRule(id).title);
+    .map(id => ruleTitle(getRule(id)));
 }
 
 function addRule(id) {
@@ -89,7 +137,7 @@ function removeRule(id) {
 const allPages = document.querySelectorAll(".page");
 const bottomTabs = document.querySelectorAll(".bottom-tab");
 const topbarTitle = document.getElementById("topbarTitle");
-const tabTitles = { "tab-reglas": "Reglas", "tab-partida": "Catanazo", "tab-config": "Configuración" };
+const tabTitleKeys = { "tab-reglas": "tabReglas", "tab-partida": "tabPartida", "tab-config": "tabConfig" };
 
 function showPage(id) {
   allPages.forEach(p => p.classList.toggle("is-active", p.id === id));
@@ -98,8 +146,8 @@ function showPage(id) {
 
 function goToTab(tabId) {
   showPage(tabId);
-  bottomTabs.forEach(t => t.classList.toggle("is-active", t.dataset.tab === tabId));
-  topbarTitle.textContent = tabTitles[tabId] || "Reglas";
+  bottomTabs.forEach(t2 => t2.classList.toggle("is-active", t2.dataset.tab === tabId));
+  topbarTitle.textContent = t(tabTitleKeys[tabId] || "tabReglas");
   updateJumpnavVisibility();
 }
 
@@ -107,7 +155,7 @@ function goToRule(ruleId) {
   const rule = getRule(ruleId);
   if (!rule) return;
   showPage(ruleId);
-  topbarTitle.textContent = rule.title;
+  topbarTitle.textContent = ruleTitle(rule);
   refreshRuleActions(ruleId);
   updateJumpnavVisibility();
 }
@@ -129,7 +177,7 @@ function renderReglasList() {
 
     const group = document.createElement("div");
     group.className = "rule-group";
-    group.innerHTML = `<h3 class="rule-group-title rule-group-title--${level}">${impactLabels[level]}</h3>`;
+    group.innerHTML = `<h3 class="rule-group-title rule-group-title--${level}">${t(impactKeys[level])}</h3>`;
 
     rulesInLevel.forEach(rule => {
       const added = selectedRuleIds.has(rule.id);
@@ -141,9 +189,9 @@ function renderReglasList() {
         <button class="rule-row-body" data-open="${rule.id}">
           <span class="rule-row-seal">${rule.seal}</span>
           <span class="rule-row-text">
-            <h4>${rule.title}</h4>
-            <p>${rule.desc}</p>
-            ${blocked ? `<span class="rule-row-note">No compatible con ${blockingRuleNames(rule).join(", ")}</span>` : ""}
+            <h4>${ruleTitle(rule)}</h4>
+            <p>${ruleDesc(rule)}</p>
+            ${blocked ? `<span class="rule-row-note">${t("noCompatibleCon")} ${blockingRuleNames(rule).join(", ")}</span>` : ""}
           </span>
         </button>
         <button class="rule-row-add${added ? " is-added" : ""}" data-add="${rule.id}" ${blocked ? "disabled" : ""}>
@@ -225,8 +273,8 @@ function renderPartidaList() {
     partidaList.innerHTML = `
       <div class="partida-empty">
         <span class="icon">⚔</span>
-        <p>Todavía no armaste tu Catanazo.<br>Andá a Reglas y sumá las que quieras jugar.</p>
-        <button class="btn-seal" data-goto-reglas>Ver reglas</button>
+        <p>${t("partidaEmptyMsg")}</p>
+        <button class="btn-seal" data-goto-reglas>${t("partidaEmptyBtn")}</button>
       </div>
     `;
     partidaList.querySelector("[data-goto-reglas]").addEventListener("click", () => goToTab("tab-reglas"));
@@ -242,7 +290,7 @@ function renderPartidaList() {
     const jumpBtn = document.createElement("button");
     jumpBtn.className = "jumpnav-seal";
     jumpBtn.dataset.jump = rule.id;
-    jumpBtn.title = rule.title;
+    jumpBtn.title = ruleTitle(rule);
     jumpBtn.innerHTML = rule.seal;
     jumpBtn.addEventListener("click", () => {
       document.getElementById(`partida-anchor-${rule.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -318,7 +366,7 @@ RULES.forEach(rule => {
   actions.dataset.ruleId = rule.id;
   actions.innerHTML = `
     <button class="btn-play-rule" data-play="${rule.id}"></button>
-    <button class="btn-back-rules" data-back>← Volver a todas las reglas</button>
+    <button class="btn-back-rules" data-back></button>
   `;
   section.appendChild(actions);
 
@@ -343,25 +391,28 @@ function refreshRuleActions(ruleId) {
   // aviso de compatibilidad
   const notice = section.querySelector(".compat-notice");
   if (notice) {
-    const names = rule.incompatible.map(id => getRule(id).title);
-    const namesList = names.join(" y ");
+    const names = rule.incompatible.map(id => ruleTitle(getRule(id)));
+    const sep = currentLang === "en" ? " and " : " y ";
+    const namesList = names.join(sep);
     const conflictNames = blockingRuleNames(rule);
     const conflict = conflictNames.length > 0;
     notice.classList.toggle("is-conflict", conflict);
     notice.innerHTML = `
-      <span class="compat-notice-tag">${conflict ? "Conflicto" : "Incompatible"}</span>
-      <p>Esta regla no es compatible con <strong>${namesList}</strong>. Se juegan por separado, no en la misma partida.${conflict ? ` Ya tenés <strong>${conflictNames.join(", ")}</strong> en tu Catanazo — quitala primero si querés sumar esta.` : ""}</p>
+      <span class="compat-notice-tag">${conflict ? t("conflictTag") : t("incompatibleTag")}</span>
+      <p>${t("compatText", { names: namesList })}${conflict ? t("compatConflictText", { names: conflictNames.join(", ") }) : ""}</p>
     `;
   }
 
   // botones
   const playBtn = section.querySelector("[data-play]");
+  const backBtn = section.querySelector("[data-back]");
+  if (backBtn) backBtn.textContent = t("btnBackRules");
   const added = selectedRuleIds.has(ruleId);
   const blocked = !added && isBlocked(rule);
 
   playBtn.classList.toggle("is-added", added);
   playBtn.disabled = blocked;
-  playBtn.textContent = added ? "✕ Quitar regla" : (blocked ? `No compatible con ${blockingRuleNames(rule).join(", ")}` : "+ Jugar regla");
+  playBtn.textContent = added ? t("btnRemoveRule") : (blocked ? `${t("noCompatibleCon")} ${blockingRuleNames(rule).join(", ")}` : t("btnPlayRule"));
 }
 
 // ============================================================
@@ -384,11 +435,55 @@ const resetSelectionBtn = document.getElementById("resetSelection");
 if (resetSelectionBtn) {
   resetSelectionBtn.addEventListener("click", () => {
     if (selectedRuleIds.size === 0) return;
-    if (confirm("¿Vaciar todas las reglas de tu Catanazo?")) {
+    if (confirm(t("confirmVaciar"))) {
       selectedRuleIds.clear();
       saveSelection();
       refreshAll();
     }
+  });
+}
+
+// ============================================================
+// CONFIGURACIÓN: compartir la app con amigos
+// ============================================================
+const shareBtn = document.getElementById("shareBtn");
+if (shareBtn) {
+  shareBtn.addEventListener("click", async () => {
+    const shareData = {
+      title: t("shareTitle"),
+      text: t("shareText"),
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (e) {
+        // el usuario cancelo el dialogo nativo, o no se pudo compartir: no hacemos nada mas
+      }
+      return;
+    }
+
+    // sin Web Share API (navegadores de escritorio, sobre todo): copiamos el link
+    const originalText = shareBtn.textContent;
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      shareBtn.textContent = t("btnShareCopied");
+    } catch (e) {
+      // ni Web Share ni Clipboard disponibles: seleccionamos el texto en un input temporal
+      const tempInput = document.createElement("input");
+      tempInput.value = shareData.url;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        shareBtn.textContent = t("btnShareCopied");
+      } catch (e2) {
+        // ultimo recurso: no se pudo copiar de ninguna forma, dejamos el boton como estaba
+      }
+      document.body.removeChild(tempInput);
+    }
+    setTimeout(() => { shareBtn.textContent = t("btnShare"); }, 2000);
   });
 }
 
@@ -414,6 +509,77 @@ if (rulesetToggle) {
 }
 
 // ============================================================
+// TOGGLE: idioma (Español / English)
+// ============================================================
+const langToggle = document.getElementById("langToggle");
+function applyLangToggleUI() {
+  if (!langToggle) return;
+  langToggle.dataset.active = currentLang;
+  langToggle.querySelectorAll(".ruleset-option").forEach(opt => {
+    opt.classList.toggle("is-active", opt.dataset.option === currentLang);
+  });
+}
+if (langToggle) {
+  applyLangToggleUI();
+  langToggle.addEventListener("click", () => {
+    currentLang = currentLang === "es" ? "en" : "es";
+    saveLang();
+    applyLangToggleUI();
+    applyLanguage();
+  });
+}
+
+// aplica el idioma activo a TODO el documento: textos fijos marcados con
+// data-i18n(-html/-alt), los titulos de regla, y todo el contenido dinamico
+// generado por JS (listas, botones, civilizaciones, mazo del 7)
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach(el => {
+    el.setAttribute("alt", t(el.dataset.i18nAlt));
+  });
+  document.querySelectorAll("[data-i18n-rule-title]").forEach(el => {
+    const rule = getRule(el.dataset.i18nRuleTitle);
+    if (rule) el.textContent = ruleTitle(rule);
+  });
+
+  refreshAll();
+  RULES.forEach(r => refreshRuleActions(r.id));
+  refreshCivTexts();
+  refreshCivFavoritesUI();
+  refreshResourceDisplay();
+
+  // el contador de cartas ya tirado ("Carta N de 30") no tiene data-i18n
+  // porque su numero es dinamico: se reformatea a mano, extrayendo el numero
+  document.querySelectorAll(".deck-count").forEach(el => {
+    const match = el.textContent.match(/(\d+)/);
+    const n = match ? match[1] : "0";
+    el.textContent = t("deckCountTpl", { n, total: FATE_DECK.length });
+  });
+
+  // si ya se tiro una carta del mazo del reino, se vuelve a mostrar en el
+  // idioma nuevo (se guarda el indice de la carta en el propio elemento)
+  document.querySelectorAll(".fate-card").forEach(fc => {
+    const idx = fc.dataset.currentCard;
+    if (idx === undefined) return;
+    const card = FATE_DECK[+idx];
+    if (!card) return;
+    const quote = fc.querySelector(".fate-quote");
+    const effectText = fc.querySelector(".fate-effect-text");
+    const tag = fc.querySelector(".fate-tag");
+    if (quote) quote.textContent = cardQuote(card);
+    if (effectText) effectText.textContent = cardEffect(card);
+    if (tag) tag.textContent = t("tag" + capitalize(card.w));
+  });
+}
+
+// ============================================================
 // CIVILIZACIONES - render con costos en iconos e imagen estatica
 // ============================================================
 const civGrid = document.getElementById("civGrid");
@@ -424,7 +590,7 @@ const STAR_FILLED_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
 function renderCostRow(resourceKeys) {
   return resourceKeys.map(key => {
     const res = RESOURCE_SETS[currentRuleset][key];
-    return `<span class="cost-icon" title="${res.name}">${res.icon}</span>`;
+    return `<span class="cost-icon" title="${resName(res)}">${res.icon}</span>`;
   }).join("");
 }
 
@@ -490,13 +656,14 @@ function refreshCivFavoritesUI() {
   const anyFav = civFavorites.size > 0;
   document.querySelectorAll(".civ-card").forEach(card => {
     const civId = card.dataset.civId;
+    const civ = CIVILIZATIONS.find(c => c.id === civId);
     const isFav = civFavorites.has(civId);
     card.classList.toggle("is-compact", anyFav && !isFav);
     const btn = card.querySelector(".civ-fav-btn");
-    if (btn) {
+    if (btn && civ) {
       btn.classList.toggle("is-active", isFav);
       btn.innerHTML = isFav ? STAR_FILLED_SVG : STAR_OUTLINE_SVG;
-      btn.setAttribute("aria-label", isFav ? `Quitar ${card.dataset.civName} de favoritas` : `Marcar ${card.dataset.civName} como favorita`);
+      btn.setAttribute("aria-label", isFav ? t("civFavRemove", { name: civName(civ) }) : t("civFavAdd", { name: civName(civ) }));
     }
   });
 }
@@ -517,7 +684,6 @@ CIVILIZATIONS.forEach(civ => {
   card.className = "civ-card";
   card.style.setProperty("--civ-color", civ.color);
   card.dataset.civId = civ.id;
-  card.dataset.civName = civ.name;
 
   card.innerHTML = `
     <div class="civ-image">
@@ -529,7 +695,7 @@ CIVILIZATIONS.forEach(civ => {
     </div>
     <div class="civ-body">
       <div class="civ-head">
-        <button class="civ-fav-btn" data-civ-fav="${civ.id}" title="Favorita" aria-label="Marcar ${civ.name} como favorita">${STAR_OUTLINE_SVG}</button>
+        <button class="civ-fav-btn" data-civ-fav="${civ.id}" title="Favorita">${STAR_OUTLINE_SVG}</button>
         <h3 class="civ-name">${civ.name}</h3>
         <span class="civ-number">N.&deg; ${civ.number}</span>
       </div>
@@ -556,16 +722,36 @@ wireCivImages(document);
 wireCivFavorites(document);
 refreshCivFavoritesUI();
 
+// vuelve a pintar nombre, etiquetas y habilidades de cada tarjeta de
+// civilizacion segun el idioma activo (documento original + clones)
+function refreshCivTexts() {
+  const costLabelKeys = ["costCamino", "costPoblado", "costCiudad", "costCdd"];
+  document.querySelectorAll(".civ-card").forEach(card => {
+    const civ = CIVILIZATIONS.find(c => c.id === card.dataset.civId);
+    if (!civ) return;
+
+    const nameEl = card.querySelector(".civ-name");
+    if (nameEl) nameEl.textContent = civName(civ);
+
+    const costLabels = card.querySelectorAll(".civ-cost-label");
+    costLabels.forEach((el, i) => { el.textContent = t(costLabelKeys[i]); });
+
+    const abilityTags = card.querySelectorAll(".civ-ability-tag");
+    if (abilityTags[0]) abilityTags[0].textContent = t("civPasivaCardTag");
+    if (abilityTags[1]) abilityTags[1].textContent = t("civActivaCardTag");
+
+    const abilityPs = card.querySelectorAll(".civ-ability p");
+    if (abilityPs[0]) abilityPs[0].textContent = civPassive(civ);
+    if (abilityPs[1]) abilityPs[1].textContent = civActive(civ);
+  });
+}
+
 // ============================================================
 // SET DE RECURSOS - vuelve a pintar costos de Civilizaciones y la
 // tabla de Asedio segun el ruleset activo (Catan Clásico / Age of
 // Catan by Joe). Corre sobre TODO el documento: la seccion original
 // y cualquier clon que este mostrandose en Catanazo al mismo tiempo.
 // ============================================================
-function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 function refreshResourceDisplay() {
   const costOrder = ["camino", "poblado", "ciudad", "cdd"];
   document.querySelectorAll(".civ-card").forEach(card => {
@@ -582,14 +768,14 @@ function refreshResourceDisplay() {
     const count = parseInt(el.dataset.resCount, 10) || 1;
     const res = RESOURCE_SETS[currentRuleset][key];
     if (!res) return;
-    const label = count > 1 ? `${capitalize(res.name)}s` : capitalize(res.name);
+    const label = count > 1 ? `${capitalize(resName(res))}s` : capitalize(resName(res));
     el.textContent = `${label} ${res.icon.repeat(count)}`;
   });
 
   const legendOrder = ["madera", "oveja", "piedra", "trigo", "arcilla"];
   const legendText = legendOrder.map(key => {
     const res = RESOURCE_SETS[currentRuleset][key];
-    return `${res.icon} ${res.name}`;
+    return `${res.icon} ${resName(res)}`;
   }).join(" &nbsp;·&nbsp; ");
   document.querySelectorAll(".resource-legend").forEach(el => {
     el.innerHTML = legendText;
@@ -674,13 +860,6 @@ document.addEventListener("keydown", (ev) => {
 // Cada instancia (la original y cada clon en Catanazo) tiene su
 // propio mazo independiente, con su propio estado.
 // ============================================================
-const tagLabels = {
-  good: "favorable",
-  neutral: "neutro",
-  risk: "riesgo",
-  bad: "desfavorable"
-};
-
 function shuffle(arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -709,8 +888,9 @@ function initFateDeck(root) {
   function resetDeck() {
     pile = shuffle(FATE_DECK.map((_, i) => i));
     drawn = 0;
-    deckCounter.textContent = `Carta 0 de ${total}`;
-    fateQuote.textContent = "Tocá el sello para tirar el 7.";
+    delete fateCard.dataset.currentCard;
+    deckCounter.textContent = t("deckCountTpl", { n: 0, total });
+    fateQuote.textContent = t("fateQuoteInitial");
     fateEffect.style.display = "none";
     reshuffleNote.classList.remove("is-visible");
   }
@@ -728,14 +908,15 @@ function initFateDeck(root) {
     const card = FATE_DECK[idx];
     drawn++;
 
-    deckCounter.textContent = `Carta ${drawn} de ${total}`;
+    deckCounter.textContent = t("deckCountTpl", { n: drawn, total });
 
     fateCard.style.opacity = "0";
     setTimeout(() => {
-      fateQuote.textContent = card.q;
-      fateEffectText.textContent = card.e;
+      fateCard.dataset.currentCard = idx;
+      fateQuote.textContent = cardQuote(card);
+      fateEffectText.textContent = cardEffect(card);
       fateTag.className = `fate-tag ${card.w}`;
-      fateTag.textContent = tagLabels[card.w];
+      fateTag.textContent = t("tag" + capitalize(card.w));
       fateEffect.style.display = "block";
       fateCard.style.opacity = "1";
     }, 150);
@@ -759,4 +940,4 @@ if (splash) {
 // ============================================================
 // primer render de toda la app, ya con todo inicializado
 // ============================================================
-refreshAll();
+applyLanguage();

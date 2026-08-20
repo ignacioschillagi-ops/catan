@@ -18,7 +18,7 @@
 
 <div class="splash" id="splash">
   <img class="splash-logo" src="images/logo.svg" alt="World of Catan">
-  <p class="splash-text">Cargando reglas de la casa…</p>
+  <p class="splash-text" data-i18n="splashText">Cargando reglas de la casa…</p>
 </div>
 
 <div class="app-shell">
@@ -27,7 +27,7 @@
     <img class="topbar-logo" src="images/logo.svg" alt="World of Catan">
     <div class="topbar-text">
       <h1 class="topbar-title" id="topbarTitle">Reglas</h1>
-      <p class="topbar-sub">World of Catan — reglas de la casa</p>
+      <p class="topbar-sub" data-i18n="topbarSub">World of Catan — reglas de la casa</p>
     </div>
   </header>
 
@@ -36,9 +36,9 @@
     <!-- TAB: REGLAS -->
     <section class="page is-active" id="tab-reglas">
       <header class="page-hero">
-        <p class="page-eyebrow">Compendio de variantes</p>
-        <h2 class="page-title">Elegí tus reglas</h2>
-        <p class="page-lede">Tocá una regla para leerla completa, o sumala directo con el botón +. Podés jugarlas por separado, combinando las que quieras.</p>
+        <p class="page-eyebrow" data-i18n="reglasEyebrow">Compendio de variantes</p>
+        <h2 class="page-title" data-i18n="reglasTitle">Elegí tus reglas</h2>
+        <p class="page-lede" data-i18n="reglasLede">Tocá una regla para leerla completa, o sumala directo con el botón +. Podés jugarlas por separado, combinando las que quieras.</p>
       </header>
       <div id="reglasList"><!-- generado por app.js desde RULES --></div>
     </section>
@@ -46,9 +46,9 @@
     <!-- TAB: CATANAZO (tu partida) -->
     <section class="page" id="tab-partida">
       <header class="page-hero page-hero--partida">
-        <p class="page-lede">Las reglas que sumaste para esta partida, de menor a mayor impacto. Usá los sellos de la derecha para saltar directo a cada una.</p>
+        <p class="page-lede" data-i18n="partidaLede">Las reglas que sumaste para esta partida, de menor a mayor impacto. Usá los sellos de la derecha para saltar directo a cada una.</p>
       </header>
-      <div class="partida-divider" id="partidaDivider"><span>Tu Catanazo</span></div>
+      <div class="partida-divider" id="partidaDivider"><span data-i18n="partidaDividerLabel">Tu Catanazo</span></div>
       <div id="partidaList"><!-- generado por app.js: contenido completo de cada regla, apilado --></div>
     </section>
 
@@ -58,51 +58,62 @@
     <!-- TAB: CONFIGURACIÓN -->
     <section class="page" id="tab-config">
       <header class="page-hero">
-        <p class="page-eyebrow">Ajustes</p>
-        <h2 class="page-title">Configuración</h2>
+        <p class="page-eyebrow" data-i18n="configEyebrow">Ajustes</p>
+        <h2 class="page-title" data-i18n="configTitle">Configuración</h2>
       </header>
 
       <div class="panel">
-        <h3 class="panel-h">Versión del juego</h3>
-        <p class="panel-note">Cambia los nombres e íconos de recursos que aparecen en Civilizaciones y Asedio, para que coincidan con tu edición física.</p>
+        <h3 class="panel-h" data-i18n="langPanelTitle">Idioma</h3>
+        <p class="panel-note" data-i18n="langPanelNote">Cambia el idioma de todas las reglas y de la interfaz.</p>
+        <button class="ruleset-toggle" id="langToggle" type="button">
+          <span class="ruleset-option" data-option="es">Español</span>
+          <span class="ruleset-option" data-option="en">English</span>
+          <span class="ruleset-thumb"></span>
+        </button>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-h" data-i18n="rulesetPanelTitle">Versión del juego</h3>
+        <p class="panel-note" data-i18n="rulesetPanelNote">Cambia los nombres e íconos de recursos que aparecen en Civilizaciones y Asedio, para que coincidan con tu edición física.</p>
         <button class="ruleset-toggle" id="rulesetToggle" type="button">
-          <span class="ruleset-option" data-option="clasico">Catan Clásico</span>
+          <span class="ruleset-option" data-option="clasico" data-i18n="rulesetClasico">Catan Clásico</span>
           <span class="ruleset-option" data-option="joe">Age of Catan by Joe</span>
           <span class="ruleset-thumb"></span>
         </button>
       </div>
 
       <div class="panel config-panel">
-        <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download>
+        <button class="btn-pdf" id="shareBtn" type="button" data-i18n="btnShare">📤 Compartir con amigos</button>
+        <a class="btn-pdf" href="pdf/reglas-world-of-catan.pdf" download data-i18n="btnPdf">
           ⬇ Bajar PDF para imprimir
         </a>
-        <button class="install-btn install-btn--danger" id="resetSelection" type="button">Vaciar Catanazo</button>
+        <button class="install-btn install-btn--danger" id="resetSelection" type="button" data-i18n="btnVaciar">Vaciar Catanazo</button>
       </div>
 
       <div class="panel">
-        <h3 class="panel-h">¿Cómo instalo la app?</h3>
+        <h3 class="panel-h" data-i18n="installTitle">¿Cómo instalo la app?</h3>
 
         <div class="install-steps">
-          <p class="install-os"><strong>En iPhone (Safari)</strong></p>
+          <p class="install-os"><strong data-i18n="installIos">En iPhone (Safari)</strong></p>
           <ol>
-            <li>Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
-            <li>Elegí "Agregar a pantalla de inicio".</li>
-            <li>Confirmá el nombre y tocá "Agregar".</li>
+            <li data-i18n-html="installIos1">Tocá el botón de compartir <span class="install-icon">⬆</span> en la barra inferior.</li>
+            <li data-i18n-html="installIos2">Elegí "Agregar a pantalla de inicio".</li>
+            <li data-i18n-html="installIos3">Confirmá el nombre y tocá "Agregar".</li>
           </ol>
 
-          <p class="install-os"><strong>En Android (Chrome)</strong></p>
+          <p class="install-os"><strong data-i18n="installAndroid">En Android (Chrome)</strong></p>
           <ol>
-            <li>Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
-            <li>Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
-            <li>Confirmá tocando "Instalar".</li>
+            <li data-i18n-html="installAndroid1">Tocá el menú <span class="install-icon">⋮</span> arriba a la derecha.</li>
+            <li data-i18n-html="installAndroid2">Elegí "Instalar app" o "Agregar a pantalla de inicio".</li>
+            <li data-i18n-html="installAndroid3">Confirmá tocando "Instalar".</li>
           </ol>
         </div>
 
-        <p class="install-note">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
+        <p class="install-note" data-i18n="installNote">Una vez instalada, el ícono queda en tu pantalla de inicio como cualquier otra app, sin necesidad de abrir el navegador.</p>
       </div>
 
       <div class="config-foot">
-        <p class="foot-msg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
+        <p class="foot-msg" data-i18n-html="footMsg">¿Ideas o comentarios sobre las reglas?<br>Escribime.</p>
         <a class="foot-link" href="https://yosoyjoe.vercel.app/" target="_blank" rel="noopener">@yosoyjoe</a>
       </div>
     </section>
@@ -110,11 +121,11 @@
     <!-- 2 Y 12 -->
     <section class="page" id="dos-doce">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Regla simple</p>
-        <h2 class="page-title">2 y 12</h2>
+        <p class="page-eyebrow" data-i18n="doceEyebrow">Regla simple</p>
+        <h2 class="page-title" data-i18n-rule-title="dos-doce">2 y 12</h2>
       </header>
       <div class="panel">
-        <p class="panel-lead">Si el resultado de los dados es <strong>2</strong> o <strong>12</strong>, ambos números producen recursos. Estos números son equivalentes en valor para efectos del juego.</p>
+        <p class="panel-lead" data-i18n-html="doceLead">Si el resultado de los dados es <strong>2</strong> o <strong>12</strong>, ambos números producen recursos. Estos números son equivalentes en valor para efectos del juego.</p>
         <div class="dice-demo">
           <div class="die">2</div>
           <span class="dice-eq">=</span>
@@ -126,15 +137,15 @@
     <!-- SOBORNO AL LADRÓN -->
     <section class="page" id="soborno">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Extorsionando al ladrón</p>
-        <h2 class="page-title">Soborno al ladrón</h2>
+        <p class="page-eyebrow" data-i18n="sobornoEyebrow">Extorsionando al ladrón</p>
+        <h2 class="page-title" data-i18n-rule-title="soborno">Soborno al ladrón</h2>
       </header>
       <div class="panel">
-        <h3 class="panel-h">Mover al ladrón</h3>
-        <p>Si el ladrón está bloqueando uno de tus números, durante la etapa de construcción podés pagar <strong>2 recursos equivalentes</strong> al hexágono obstruido, para moverlo a un hexágono adyacente al que ocupa.</p>
+        <h3 class="panel-h" data-i18n="sobornoH">Mover al ladrón</h3>
+        <p data-i18n-html="sobornoLead">Si el ladrón está bloqueando uno de tus números, durante la etapa de construcción podés pagar <strong>2 recursos equivalentes</strong> al hexágono obstruido, para moverlo a un hexágono adyacente al que ocupa.</p>
         <div class="callout">
-          <span class="callout-tag">Importante</span>
-          <p>Al moverlo de esta manera, no podés robar recursos de los jugadores que ocupen el nuevo hexágono, como lo harías con un 7.</p>
+          <span class="callout-tag" data-i18n="sobornoCalloutTag">Importante</span>
+          <p data-i18n="sobornoCalloutText">Al moverlo de esta manera, no podés robar recursos de los jugadores que ocupen el nuevo hexágono, como lo harías con un 7.</p>
         </div>
       </div>
     </section>
@@ -142,14 +153,14 @@
     <!-- RONDA DE CIERRE -->
     <section class="page" id="ronda-cierre">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Cierre de partida</p>
-        <h2 class="page-title">Ronda de cierre</h2>
+        <p class="page-eyebrow" data-i18n="rondaEyebrow">Cierre de partida</p>
+        <h2 class="page-title" data-i18n-rule-title="ronda-cierre">Ronda de cierre</h2>
       </header>
       <div class="panel">
-        <p class="panel-lead">Cuando un jugador alcanza los 10 puntos de victoria, la partida no termina en el acto: todos los demás jugadores completan un turno más antes de declarar ganador.</p>
+        <p class="panel-lead" data-i18n="rondaLead">Cuando un jugador alcanza los 10 puntos de victoria, la partida no termina en el acto: todos los demás jugadores completan un turno más antes de declarar ganador.</p>
         <div class="callout">
-          <span class="callout-tag">Empate</span>
-          <p>Si más de un jugador llega a 10 puntos o más durante esta ronda final, gana quien tenga más puntos de victoria. Si el empate persiste, gana quien lo haya alcanzado primero en el orden de turno.</p>
+          <span class="callout-tag" data-i18n="rondaCalloutTag">Empate</span>
+          <p data-i18n="rondaCalloutText">Si más de un jugador llega a 10 puntos o más durante esta ronda final, gana quien tenga más puntos de victoria. Si el empate persiste, gana quien lo haya alcanzado primero en el orden de turno.</p>
         </div>
       </div>
     </section>
@@ -157,14 +168,14 @@
     <!-- DADOS DOBLES -->
     <section class="page" id="dados-dobles">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Regla simple</p>
-        <h2 class="page-title">Dados dobles</h2>
+        <p class="page-eyebrow" data-i18n="doblesEyebrow">Regla simple</p>
+        <h2 class="page-title" data-i18n-rule-title="dados-dobles">Dados dobles</h2>
       </header>
       <div class="panel">
-        <p class="panel-lead">Si el resultado de los dados es doble (1-1, 2-2, 3-3, 4-4, 5-5 o 6-6), se resuelve esa producción con normalidad y se tira de nuevo de inmediato, sumando el resultado nuevo aparte.</p>
+        <p class="panel-lead" data-i18n="doblesLead">Si el resultado de los dados es doble (1-1, 2-2, 3-3, 4-4, 5-5 o 6-6), se resuelve esa producción con normalidad y se tira de nuevo de inmediato, sumando el resultado nuevo aparte.</p>
         <div class="callout">
-          <span class="callout-tag">Importante</span>
-          <p>Si la segunda tirada también resulta en un 7, se resuelve como cualquier 7 antes de continuar el turno.</p>
+          <span class="callout-tag" data-i18n="doblesCalloutTag">Importante</span>
+          <p data-i18n="doblesCalloutText">Si la segunda tirada también resulta en un 7, se resuelve como cualquier 7 antes de continuar el turno.</p>
         </div>
       </div>
     </section>
@@ -172,14 +183,14 @@
     <!-- MAESTRO DE PUERTOS -->
     <section class="page" id="maestro-puertos">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Puntuación final</p>
-        <h2 class="page-title">Maestro de puertos</h2>
+        <p class="page-eyebrow" data-i18n="maestroEyebrow">Puntuación final</p>
+        <h2 class="page-title" data-i18n-rule-title="maestro-puertos">Maestro de puertos</h2>
       </header>
       <div class="panel">
-        <p class="panel-lead">Al final de la partida, el jugador con asentamientos en la mayor variedad de tipos de puerto distintos recibe 1 punto de victoria extra.</p>
+        <p class="panel-lead" data-i18n="maestroLead">Al final de la partida, el jugador con asentamientos en la mayor variedad de tipos de puerto distintos recibe 1 punto de victoria extra.</p>
         <ul class="rule-list">
-          <li>Se cuenta variedad de tipos de puerto (por ejemplo: 2:1 madera, 2:1 trigo, 3:1 genérico), no la cantidad total de puertos.</li>
-          <li>En caso de empate en la cantidad de tipos distintos, ningún jugador recibe el punto.</li>
+          <li data-i18n="maestroList1">Se cuenta variedad de tipos de puerto (por ejemplo: 2:1 madera, 2:1 trigo, 3:1 genérico), no la cantidad total de puertos.</li>
+          <li data-i18n="maestroList2">En caso de empate en la cantidad de tipos distintos, ningún jugador recibe el punto.</li>
         </ul>
       </div>
     </section>
@@ -187,14 +198,14 @@
     <!-- CIUDAD EXPRÉS -->
     <section class="page" id="ciudad-expres">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Construcción</p>
-        <h2 class="page-title">Ciudad exprés</h2>
+        <p class="page-eyebrow" data-i18n="expresEyebrow">Construcción</p>
+        <h2 class="page-title" data-i18n-rule-title="ciudad-expres">Ciudad exprés</h2>
       </header>
       <div class="panel">
-        <p class="panel-lead">Al construir un poblado nuevo, podés descartar una carta de desarrollo de Punto de Victoria sin revelarla y subirlo directo a ciudad, sin pagar el costo normal de ciudad.</p>
+        <p class="panel-lead" data-i18n="expresLead">Al construir un poblado nuevo, podés descartar una carta de desarrollo de Punto de Victoria sin revelarla y subirlo directo a ciudad, sin pagar el costo normal de ciudad.</p>
         <div class="callout">
-          <span class="callout-tag">Importante</span>
-          <p>Esto reemplaza el pago de la ciudad; el poblado igual debe pagarse con normalidad al construirse primero.</p>
+          <span class="callout-tag" data-i18n="expresCalloutTag">Importante</span>
+          <p data-i18n="expresCalloutText">Esto reemplaza el pago de la ciudad; el poblado igual debe pagarse con normalidad al construirse primero.</p>
         </div>
       </div>
     </section>
@@ -202,50 +213,50 @@
     <!-- CONSECUENCIAS DEL 7 -->
     <section class="page" id="consecuencias">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">El reino decide</p>
-        <h2 class="page-title">Consecuencias del 7</h2>
-        <p class="page-lede">Al sacar un 7, además de mover el ladrón con normalidad, se puede robar una carta del mazo del reino para ver qué sucede este turno. El ladrón se mueve igual, salvo que la carta indique lo contrario.</p>
+        <p class="page-eyebrow" data-i18n="consecEyebrow">El reino decide</p>
+        <h2 class="page-title" data-i18n-rule-title="consecuencias">Consecuencias del 7</h2>
+        <p class="page-lede" data-i18n="consecLede">Al sacar un 7, además de mover el ladrón con normalidad, se puede robar una carta del mazo del reino para ver qué sucede este turno. El ladrón se mueve igual, salvo que la carta indique lo contrario.</p>
       </header>
 
       <div class="deck-panel">
         <div class="deck-panel-top">
           <span class="deck-count">Carta 0 de 30</span>
-          <button class="btn-reset" title="Reiniciar mazo">↺ reiniciar mazo</button>
+          <button class="btn-reset" title="Reiniciar mazo" data-i18n="btnReset">↺ reiniciar mazo</button>
         </div>
         <div class="fate-card">
           <div class="fate-card-inner">
-            <p class="fate-card-eyebrow">Carta del reino</p>
-            <p class="fate-quote">Tocá el sello para tirar el 7.</p>
+            <p class="fate-card-eyebrow" data-i18n="fateCardEyebrow">Carta del reino</p>
+            <p class="fate-quote" data-i18n="fateQuoteInitial">Tocá el sello para tirar el 7.</p>
             <div class="fate-effect" style="display:none;">
               <span class="fate-tag"></span>
               <p class="fate-effect-text"></p>
             </div>
           </div>
         </div>
-        <button class="btn-seal draw-btn">Tirar el 7</button>
-        <p class="deck-note">El mazo se agotó — se barajó de nuevo.</p>
+        <button class="btn-seal draw-btn" data-i18n="drawBtn">Tirar el 7</button>
+        <p class="deck-note" data-i18n="deckNote">El mazo se agotó — se barajó de nuevo.</p>
       </div>
     </section>
 
     <!-- CIVILIZACIONES -->
     <section class="page" id="civilizaciones">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Seis pueblos, seis caminos</p>
-        <h2 class="page-title">Civilizaciones</h2>
-        <p class="page-lede">Existen 6 civilizaciones distintas, con 3 tipos distintos de construcción. Cada una posee dos habilidades: una pasiva y otra activa.</p>
+        <p class="page-eyebrow" data-i18n="civEyebrow">Seis pueblos, seis caminos</p>
+        <h2 class="page-title" data-i18n-rule-title="civilizaciones">Civilizaciones</h2>
+        <p class="page-lede" data-i18n="civLede">Existen 6 civilizaciones distintas, con 3 tipos distintos de construcción. Cada una posee dos habilidades: una pasiva y otra activa.</p>
       </header>
 
       <div class="panel panel--split">
         <div>
-          <span class="callout-tag">Habilidad pasiva</span>
-          <p>Efecto que está siempre activo durante toda la partida, sin necesidad de declararlo ni gastar nada para usarlo. Se aplica automáticamente cuando se cumple su condición.</p>
+          <span class="callout-tag" data-i18n="civPasivaTag">Habilidad pasiva</span>
+          <p data-i18n="civPasivaText">Efecto que está siempre activo durante toda la partida, sin necesidad de declararlo ni gastar nada para usarlo. Se aplica automáticamente cuando se cumple su condición.</p>
         </div>
         <div>
-          <span class="callout-tag callout-tag--alt">Habilidad activa (con 7)</span>
-          <p>Efecto que se dispara únicamente cuando el jugador de esa civilización obtiene un 7. No es automática: el jugador decide si la usa y en qué orden respecto a robar la carta.</p>
+          <span class="callout-tag callout-tag--alt" data-i18n="civActivaTag">Habilidad activa (con 7)</span>
+          <p data-i18n="civActivaText">Efecto que se dispara únicamente cuando el jugador de esa civilización obtiene un 7. No es automática: el jugador decide si la usa y en qué orden respecto a robar la carta.</p>
         </div>
       </div>
-      <p class="panel-note">Cada jugador lanza un dado para saber qué civilización utilizará. Si el número ya salió, se vuelve a lanzar.</p>
+      <p class="panel-note" data-i18n="civDadoNote">Cada jugador lanza un dado para saber qué civilización utilizará. Si el número ya salió, se vuelve a lanzar.</p>
       <p class="panel-note panel-note--icons resource-legend"><!-- generado por app.js segun el ruleset activo --></p>
 
       <div class="civ-grid" id="civGrid"><!-- civ cards injected by JS --></div>
@@ -254,28 +265,28 @@
     <!-- ASEDIO Y DEFENSA -->
     <section class="page" id="asedio">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Asedio a otro jugador</p>
-        <h2 class="page-title">Asedio y defensa</h2>
+        <p class="page-eyebrow" data-i18n="asedioEyebrow">Asedio a otro jugador</p>
+        <h2 class="page-title" data-i18n-rule-title="asedio">Asedio y defensa</h2>
       </header>
 
       <div class="siege-top">
         <div class="knight-image">
           <div class="knight-placeholder">
             <span class="icon">⚔</span>
-            <span class="label">Carta de Caballero</span>
+            <span class="label" data-i18n="knightLabel">Carta de Caballero</span>
           </div>
-          <img class="knight-img" src="images/knight.jpg" alt="Ejemplo de carta de Caballero">
+          <img class="knight-img" src="images/knight.jpg" alt="Ejemplo de carta de Caballero" data-i18n-alt="knightAlt">
         </div>
 
         <div class="panel siege-rules">
-          <h3 class="panel-h">Asediando al enemigo</h3>
+          <h3 class="panel-h" data-i18n="asediandoH">Asediando al enemigo</h3>
           <ul class="rule-list">
-            <li>Si tenés un camino, poblado o ciudad adyacente a una ficha de otro jugador, podés declarar un asedio sobre ella como <strong>última acción de tu turno</strong>.</li>
-            <li>Costo: <strong>1 carta de Caballero</strong> + los mismos recursos que se usaron para construir esa ficha. El Caballero sigue la regla estándar de cartas de desarrollo: si lo comprás este turno, recién podés jugarlo en tu próximo turno.</li>
-            <li>No hay límite de cantidad de asedios por turno, siempre que tengas fichas rivales adyacentes y los recursos para pagarlos.</li>
-            <li>Un jugador con <strong>7 o más puntos de victoria a la vista</strong> no puede declarar ningún asedio (aunque sí puede ser objetivo de uno).</li>
-            <li>Solo puede haber <strong>un asedio activo por ficha</strong> a la vez.</li>
-            <li>La ficha asediada se marca con una ficha de asedio y no produce recursos mientras dure, sin importar si sale su número en el dado.</li>
+            <li data-i18n-html="asedioList1">Si tenés un camino, poblado o ciudad adyacente a una ficha de otro jugador, podés declarar un asedio sobre ella como <strong>última acción de tu turno</strong>.</li>
+            <li data-i18n-html="asedioList2">Costo: <strong>1 carta de Caballero</strong> + los mismos recursos que se usaron para construir esa ficha. El Caballero sigue la regla estándar de cartas de desarrollo: si lo comprás este turno, recién podés jugarlo en tu próximo turno.</li>
+            <li data-i18n="asedioList3">No hay límite de cantidad de asedios por turno, siempre que tengas fichas rivales adyacentes y los recursos para pagarlos.</li>
+            <li data-i18n-html="asedioList4">Un jugador con <strong>7 o más puntos de victoria a la vista</strong> no puede declarar ningún asedio (aunque sí puede ser objetivo de uno).</li>
+            <li data-i18n-html="asedioList5">Solo puede haber <strong>un asedio activo por ficha</strong> a la vez.</li>
+            <li data-i18n="asedioList6">La ficha asediada se marca con una ficha de asedio y no produce recursos mientras dure, sin importar si sale su número en el dado.</li>
           </ul>
         </div>
       </div>
@@ -283,26 +294,26 @@
       <div class="cost-table-wrap">
         <table class="cost-table">
           <thead>
-            <tr><th>Ficha</th><th>Costo atacar</th><th>Costo defender</th></tr>
+            <tr><th data-i18n="costTh1">Ficha</th><th data-i18n="costTh2">Costo atacar</th><th data-i18n="costTh3">Costo defender</th></tr>
           </thead>
           <tbody>
-            <tr><td>Camino</td><td>1 Caballero ⚔️ + 2 recursos 🚥</td><td>1 Caballero ⚔️</td></tr>
-            <tr><td>Poblado</td><td>1 Caballero ⚔️ + 4 recursos 🛖</td><td>1 Caballero ⚔️ + 1 <span class="res-label" data-res-key="arcilla" data-res-count="1">Arcilla 🧱</span></td></tr>
-            <tr><td>Ciudad</td><td>1 Caballero ⚔️ + 5 recursos 🏯</td><td>1 Caballero ⚔️ + 2 <span class="res-label" data-res-key="piedra" data-res-count="2">Piedras 🪨🪨</span></td></tr>
+            <tr><td data-i18n="costCamino">Camino</td><td><span data-i18n="asedioAtkCamino">1 Caballero ⚔️ + 2 recursos 🚥</span></td><td><span data-i18n="caballero">Caballero</span> ⚔️</td></tr>
+            <tr><td data-i18n="costPoblado">Poblado</td><td><span data-i18n="asedioAtkPoblado">1 Caballero ⚔️ + 4 recursos 🛖</span></td><td>1 <span data-i18n="caballero">Caballero</span> ⚔️ + 1 <span class="res-label" data-res-key="arcilla" data-res-count="1">Arcilla 🧱</span></td></tr>
+            <tr><td data-i18n="costCiudad">Ciudad</td><td><span data-i18n="asedioAtkCiudad">1 Caballero ⚔️ + 5 recursos 🏯</span></td><td>1 <span data-i18n="caballero">Caballero</span> ⚔️ + 2 <span class="res-label" data-res-key="piedra" data-res-count="2">Piedras 🪨🪨</span></td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="panel">
-        <h3 class="panel-h">Defensa del asedio</h3>
-        <p>Solo el jugador atacado puede resistir, como <strong>última acción de su turno</strong>, pagando el costo de defensa correspondiente. Si paga, retira la ficha de asedio y la pieza sigue en pie con normalidad.</p>
+        <h3 class="panel-h" data-i18n="defensaH">Defensa del asedio</h3>
+        <p data-i18n-html="defensaText">Solo el jugador atacado puede resistir, como <strong>última acción de su turno</strong>, pagando el costo de defensa correspondiente. Si paga, retira la ficha de asedio y la pieza sigue en pie con normalidad.</p>
 
-        <h3 class="panel-h">Resolución</h3>
-        <p>Si el asedio no fue defendido, se resuelve al comienzo de la vuelta siguiente del atacante (una vuelta completa de la mesa), <strong>justo antes de tirar los dados</strong>. Un poblado o camino destruido vuelve a la mano del jugador; una ciudad se degrada a poblado y se devuelve.</p>
+        <h3 class="panel-h" data-i18n="resolucionH">Resolución</h3>
+        <p data-i18n-html="resolucionText">Si el asedio no fue defendido, se resuelve al comienzo de la vuelta siguiente del atacante (una vuelta completa de la mesa), <strong>justo antes de tirar los dados</strong>. Un poblado o camino destruido vuelve a la mano del jugador; una ciudad se degrada a poblado y se devuelve.</p>
 
         <div class="callout">
-          <span class="callout-tag">Importante</span>
-          <p>La ficha sigue valiendo puntos mientras siga en el tablero. La carta de Caballero utilizada no afecta al ladrón.</p>
+          <span class="callout-tag" data-i18n="asedioCalloutTag">Importante</span>
+          <p data-i18n="asedioCalloutText">La ficha sigue valiendo puntos mientras siga en el tablero. La carta de Caballero utilizada no afecta al ladrón.</p>
         </div>
       </div>
     </section>
@@ -310,9 +321,9 @@
     <!-- CATÁSTROFES -->
     <section class="page" id="catastrofes">
       <header class="page-hero page-hero--sm">
-        <p class="page-eyebrow">Carta de catástrofe + 1 PV</p>
-        <h2 class="page-title">Catástrofes</h2>
-        <p class="page-lede">Cinco cartas especiales mezcladas entre las cartas de desarrollo. Cada una afecta al azar a un grupo de hexágonos del tablero: algunas reordenan sus números, otras los dejan sin producir por un tiempo.</p>
+        <p class="page-eyebrow" data-i18n="catEyebrow">Carta de catástrofe + 1 PV</p>
+        <h2 class="page-title" data-i18n-rule-title="catastrofes">Catástrofes</h2>
+        <p class="page-lede" data-i18n="catLede">Cinco cartas especiales mezcladas entre las cartas de desarrollo. Cada una afecta al azar a un grupo de hexágonos del tablero: algunas reordenan sus números, otras los dejan sin producir por un tiempo.</p>
       </header>
 
       <div class="disaster-grid">
@@ -322,8 +333,8 @@
             <img src="images/catastrofe-tornado.jpg" alt="Carta de Tornado">
           </div>
           <div class="disaster-body">
-            <h3>Tornado <span>Ayuntamiento</span></h3>
-            <p>Todos los números se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+            <h3><span data-i18n="tornadoName">Tornado</span> <span data-i18n="tornadoBuilding">Ayuntamiento</span></h3>
+            <p data-i18n="tornadoDesc">Todos los números se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
           </div>
         </div>
         <div class="disaster-card">
@@ -332,8 +343,8 @@
             <img src="images/catastrofe-sequia.jpg" alt="Carta de Sequía">
           </div>
           <div class="disaster-body">
-            <h3>Sequía <span>Iglesia</span></h3>
-            <p>Los números con ovejas se voltean y no producen recursos hasta que vuelva a ser el turno del jugador que jugó la carta.</p>
+            <h3><span data-i18n="sequiaName">Sequía</span> <span data-i18n="sequiaBuilding">Iglesia</span></h3>
+            <p data-i18n="sequiaDesc">Los números con ovejas se voltean y no producen recursos hasta que vuelva a ser el turno del jugador que jugó la carta.</p>
           </div>
         </div>
         <div class="disaster-card">
@@ -342,8 +353,8 @@
             <img src="images/catastrofe-tsunami.jpg" alt="Carta de Tsunami">
           </div>
           <div class="disaster-body">
-            <h3>Tsunami <span>Biblioteca</span></h3>
-            <p>Los números con ciudades costeras se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+            <h3><span data-i18n="tsunamiName">Tsunami</span> <span data-i18n="tsunamiBuilding">Biblioteca</span></h3>
+            <p data-i18n="tsunamiDesc">Los números con ciudades costeras se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
           </div>
         </div>
         <div class="disaster-card">
@@ -352,8 +363,8 @@
             <img src="images/catastrofe-incendio.jpg" alt="Carta de Incendio">
           </div>
           <div class="disaster-body">
-            <h3>Incendio <span>Mercado</span></h3>
-            <p>Los números con trigos y maderas se voltean y no producen recursos hasta que vuelva a ser el turno del jugador que jugó la carta.</p>
+            <h3><span data-i18n="incendioName">Incendio</span> <span data-i18n="incendioBuilding">Mercado</span></h3>
+            <p data-i18n="incendioDesc">Los números con trigos y maderas se voltean y no producen recursos hasta que vuelva a ser el turno del jugador que jugó la carta.</p>
           </div>
         </div>
         <div class="disaster-card">
@@ -362,23 +373,23 @@
             <img src="images/catastrofe-terremoto.jpg" alt="Carta de Terremoto">
           </div>
           <div class="disaster-body">
-            <h3>Terremoto <span>Universidad</span></h3>
-            <p>Los números con piedras y barros se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
+            <h3><span data-i18n="terremotoName">Terremoto</span> <span data-i18n="terremotoBuilding">Universidad</span></h3>
+            <p data-i18n="terremotoDesc">Los números con piedras y barros se barajan y se colocan de manera aleatoria sobre los hexágonos.</p>
           </div>
         </div>
       </div>
 
       <div class="panel">
-        <h3 class="panel-h">Reglas generales</h3>
+        <h3 class="panel-h" data-i18n="catReglasH">Reglas generales</h3>
         <ul class="rule-list">
-          <li>Todas las cartas de catástrofe devuelven el ladrón al desierto.</li>
-          <li>Las cartas de Catástrofe se encuentran entre las cartas de desarrollo: son las cartas de 1 punto de victoria (se puede escribir, pegar o imprimir el nombre de la catástrofe sobre el diseño de esa carta).</li>
-          <li>Si un jugador compra 2 o más CDD en el mismo turno y obtiene dos o más cartas de Catástrofe, se resuelven en el orden de compra.</li>
+          <li data-i18n="catList1">Todas las cartas de catástrofe devuelven el ladrón al desierto.</li>
+          <li data-i18n="catList2">Las cartas de Catástrofe se encuentran entre las cartas de desarrollo: son las cartas de 1 punto de victoria (se puede escribir, pegar o imprimir el nombre de la catástrofe sobre el diseño de esa carta).</li>
+          <li data-i18n="catList3">Si un jugador compra 2 o más CDD en el mismo turno y obtiene dos o más cartas de Catástrofe, se resuelven en el orden de compra.</li>
         </ul>
 
         <div class="callout callout--warning">
-          <span class="callout-tag callout-tag--warn">Obligatorio</span>
-          <p>Si un jugador obtiene esta carta, debe revelarla inmediatamente. Si lo hace, sigue valiendo 1 PV; si no la revela, el punto es inválido.</p>
+          <span class="callout-tag callout-tag--warn" data-i18n="catCalloutTag">Obligatorio</span>
+          <p data-i18n="catCalloutText">Si un jugador obtiene esta carta, debe revelarla inmediatamente. Si lo hace, sigue valiendo 1 PV; si no la revela, el punto es inválido.</p>
         </div>
       </div>
     </section>
