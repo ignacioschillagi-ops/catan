@@ -449,7 +449,7 @@ html, body {
   transition: transform 0.25s ease;
   z-index: 0;
 }
-.ruleset-toggle[data-active="joe"] .ruleset-thumb {
+.ruleset-toggle[data-active-index="1"] .ruleset-thumb {
   transform: translateX(100%);
 }
 .ruleset-option {
@@ -1176,11 +1176,14 @@ html, body {
    (object-fit: cover ya recorta desde el centro por defecto) */
 .partida-block .knight-image {
   align-self: start;
-  height: 173px;
+  height: 230px;
   min-height: 0;
 }
+.partida-block .knight-image img {
+  object-position: top;
+}
 @media (max-width: 700px) {
-  .partida-block .knight-image { height: 120px; }
+  .partida-block .knight-image { height: 160px; }
 }
 
 /* ============================================================
