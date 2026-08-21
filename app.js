@@ -491,12 +491,21 @@ if (shareBtn) {
 // TOGGLE: Catan Clásico vs Age of Catan by Joe (set de recursos)
 // ============================================================
 const rulesetToggle = document.getElementById("rulesetToggle");
-function applyRulesetUI() {
-  if (!rulesetToggle) return;
-  rulesetToggle.dataset.active = currentRuleset;
-  rulesetToggle.querySelectorAll(".ruleset-option").forEach(opt => {
-    opt.classList.toggle("is-active", opt.dataset.option === currentRuleset);
+// aplica el estado visual (opcion resaltada + posicion de la perilla)
+// a cualquier switch de dos opciones tipo .ruleset-toggle, de forma
+// generica, sin depender de los nombres de valor de cada opcion
+function setToggleState(toggleEl, activeValue) {
+  if (!toggleEl) return;
+  const options = [...toggleEl.querySelectorAll(".ruleset-option")];
+  const activeIndex = options.findIndex(opt => opt.dataset.option === activeValue);
+  toggleEl.dataset.activeIndex = activeIndex === -1 ? 0 : activeIndex;
+  options.forEach(opt => {
+    opt.classList.toggle("is-active", opt.dataset.option === activeValue);
   });
+}
+
+function applyRulesetUI() {
+  setToggleState(rulesetToggle, currentRuleset);
 }
 if (rulesetToggle) {
   applyRulesetUI();
@@ -513,11 +522,7 @@ if (rulesetToggle) {
 // ============================================================
 const langToggle = document.getElementById("langToggle");
 function applyLangToggleUI() {
-  if (!langToggle) return;
-  langToggle.dataset.active = currentLang;
-  langToggle.querySelectorAll(".ruleset-option").forEach(opt => {
-    opt.classList.toggle("is-active", opt.dataset.option === currentLang);
-  });
+  setToggleState(langToggle, currentLang);
 }
 if (langToggle) {
   applyLangToggleUI();
